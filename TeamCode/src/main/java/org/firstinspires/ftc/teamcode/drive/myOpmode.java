@@ -35,23 +35,21 @@ public class myOpmode extends LinearOpMode {
 
         Trajectory untitled0 = drive.trajectoryBuilder(startPose)
                 .splineTo(new Vector2d(-36.79, -23.00), Math.toRadians(0.00))
-                .splineTo(new Vector2d(-46.66, -9.41), Math.toRadians(103.71))
-                .splineTo(new Vector2d(-40.52, -6.24), Math.toRadians(0.00))
-                .splineTo(new Vector2d(37.72, -21.14), Math.toRadians(-6.37))
                 .build();
 
 
         Trajectory untitled1 = drive.trajectoryBuilder(untitled0.end())
-                .splineTo(new Vector2d(-46.66, -9.41), Math.toRadians(103.71))
-                .splineTo(new Vector2d(-40.52, -6.24), Math.toRadians(0.00))
-                .splineTo(new Vector2d(37.72, -21.14), Math.toRadians(-6.37))
+                .splineTo(new Vector2d(-42.01, -10.71), Math.toRadians(128.16))
+                .splineTo(new Vector2d(-35.30, -11.46), Math.toRadians(-18.76))
+                .splineTo(new Vector2d(-26.73, -13.51), Math.toRadians(-12.68))
+                .splineTo(new Vector2d(-4.75, -11.64), Math.toRadians(-11.70))
+                .splineTo(new Vector2d(28.04, -11.46), Math.toRadians(0.33))
+                .splineTo(new Vector2d(36.61, -35.67), Math.toRadians(270.00))
                 .build();
 
+
         drive.followTrajectory(untitled0);
-        robot.spikeMarkDrop.setPosition(-1);
-     sleep(200);
-        robot.spikeMarkDrop.setPosition(1);
-        sleep(600);
+        sleep(4000);
         drive.followTrajectory(untitled1);
 
 
