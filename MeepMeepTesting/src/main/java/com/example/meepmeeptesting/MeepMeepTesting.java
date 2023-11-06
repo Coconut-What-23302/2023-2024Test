@@ -21,21 +21,29 @@ public class MeepMeepTesting {
 
 //                                .splineToConstantHeading(new Vector2d(-55.73, -34.66), Math.toRadians(115.52))
 
-                                .splineToLinearHeading(new Pose2d(-57.61, -36.98, Math.toRadians(70.94)), Math.toRadians(70.94))
-                                .splineToLinearHeading(new Pose2d(-36.00, -23.00, Math.toRadians(0.00)), Math.toRadians(0.00))
-                                .addDisplacementMarker(() -> {
-                                    // grab wobble goal
-                                })
-                                .lineTo(new Vector2d(-40.61, -14.75))
-                                .splineToConstantHeading(new Vector2d(-28.55, -9.52), Math.toRadians(8.87))
-                                .splineToConstantHeading(new Vector2d(-16.06, -13.15), Math.toRadians(-9.82))
-                                .splineToConstantHeading(new Vector2d(-4.00, -10.53), Math.toRadians(15.87))
-                                .splineToConstantHeading(new Vector2d(7.63, -9.52), Math.toRadians(10.45))
-                                .splineToConstantHeading(new Vector2d(17.22, -16.20), Math.toRadians(7.22))
-                                .splineToConstantHeading(new Vector2d(28.99, -10.97), Math.toRadians(30.68))
-                                .splineToConstantHeading(new Vector2d(33.35, -8.06), Math.toRadians(42.85))
-                                .splineToConstantHeading(new Vector2d(27.39, -65.17), Math.toRadians(252.09))
-                                .lineToSplineHeading(new Pose2d(47.73, -35.24, Math.toRadians(180.00)))
+//                                .lineToSplineHeading(new Pose2d(-35.67, -23.18, Math.toRadians(0.00)))
+//                                .splineToConstantHeading(new Vector2d(-38.29, -13.01), Math.toRadians(93.53))
+//                                .splineToConstantHeading(new Vector2d(-7.63, -11.26), Math.toRadians(25.47))
+//                                .splineToConstantHeading(new Vector2d(4.14, -10.97), Math.toRadians(77.81))
+//                                .splineToConstantHeading(new Vector2d(30.73, -16.20), Math.toRadians(-23.51))
+//                                .lineToSplineHeading(new Pose2d(53.55, -34.95, Math.toRadians(180.00)))
+//                                6s
+
+//                                .splineToConstantHeading(new Vector2d(-60.67, -54.42), Math.toRadians(87.53))
+//                                .splineTo(new Vector2d(-55.58, -34.22), Math.toRadians(62.35))
+//                                .splineToConstantHeading(new Vector2d(-51.22, -15.77), Math.toRadians(0.00))
+//                                .lineToSplineHeading(new Pose2d(-38.87, -23.00, Math.toRadians(0.00)))
+//                                .splineToConstantHeading(new Vector2d(-35.53, -8.94), Math.toRadians(93.53))
+//                                .splineToConstantHeading(new Vector2d(-7.63, -11.26), Math.toRadians(25.47))
+//                                .splineToConstantHeading(new Vector2d(4.14, -10.97), Math.toRadians(77.81))
+//                                .splineToConstantHeading(new Vector2d(30.73, -16.20), Math.toRadians(-23.51))
+//                                .lineToSplineHeading(new Pose2d(53.55, -34.95, Math.toRadians(180.00)))
+//                8s
+
+
+
+
+
 
 
 
