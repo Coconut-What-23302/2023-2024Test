@@ -33,35 +33,6 @@ public class MeepMeepTesting {
                                 .splineToLinearHeading(new Pose2d(53.00, -40.00, Math.toRadians(180.00)), Math.toRadians(180.00))
 
 
-
-//                                6s
-
-//                                .splineToConstantHeading(new Vector2d(-60.67, -54.42), Math.toRadians(87.53))
-//                                .splineTo(new Vector2d(-55.58, -34.22), Math.toRadians(62.35))
-//                                .splineToConstantHeading(new Vector2d(-51.22, -15.77), Math.toRadians(0.00))
-//                                .lineToSplineHeading(new Pose2d(-38.87, -23.00, Math.toRadians(0.00)))
-//                                .splineToConstantHeading(new Vector2d(-35.53, -8.94), Math.toRadians(93.53))
-//                                .splineToConstantHeading(new Vector2d(-7.63, -11.26), Math.toRadians(25.47))
-//                                .splineToConstantHeading(new Vector2d(4.14, -10.97), Math.toRadians(77.81))
-//                                .splineToConstantHeading(new Vector2d(30.73, -16.20), Math.toRadians(-23.51))
-//                                .lineToSplineHeading(new Pose2d(53.55, -34.95, Math.toRadians(180.00)))
-//                8s
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                 // do not touch
                                 .build()
 

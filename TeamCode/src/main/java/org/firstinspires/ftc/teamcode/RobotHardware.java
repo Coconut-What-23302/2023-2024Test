@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 //import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -17,6 +16,12 @@ public class RobotHardware
 
 
     /* Public OpMode members. */
+    public int hangRaise = 10000;
+    public int hangDown = 0;
+
+    public double activeIntake = 1;
+    public double activeOuttake = -1;
+    public double OuttakeHold = 0.2;
     public DcMotor frontLeft     = null;
     public DcMotor backLeft      = null;
     public DcMotor frontRight    = null;
@@ -24,7 +29,8 @@ public class RobotHardware
 
     public DcMotor intakeMotor = null;
 
-    public DcMotor hangDCMotor = null;
+    public DcMotor hangPivot = null;
+    public DcMotor hangMotor = null;
 
 
 
@@ -54,7 +60,8 @@ public class RobotHardware
         frontRight = hwMap.dcMotor.get("frontRight");
         backRight = hwMap.dcMotor.get("backRight");
         intakeMotor = hwMap.dcMotor.get("spiny");
-        hangDCMotor = hwMap.dcMotor.get("hangRaise");
+        hangPivot = hwMap.dcMotor.get("hangRaise");
+        hangMotor = hwMap.dcMotor.get("hangMotor");
 
 
 
@@ -65,7 +72,8 @@ public class RobotHardware
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.FORWARD);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
-        hangDCMotor.setDirection(DcMotor.Direction.FORWARD);
+        hangPivot.setDirection(DcMotor.Direction.FORWARD);
+        hangMotor.setDirection(DcMotor.Direction.FORWARD);
 
 
 
@@ -79,7 +87,7 @@ public class RobotHardware
         frontRight.setPower(0);
         backRight.setPower(0);
         intakeMotor.setPower(0);
-        hangDCMotor.setPower(0);
+        hangPivot.setPower(0);
 
 
 
@@ -91,7 +99,8 @@ public class RobotHardware
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        hangDCMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hangPivot.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hangMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
 
@@ -102,7 +111,13 @@ public class RobotHardware
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        hangDCMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        hangPivot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        hangPivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // set default pos to down
+        hangPivot.setTargetPosition(hangDown);
+        hangPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
 
@@ -116,15 +131,21 @@ public class RobotHardware
     }
     /**
      * spikeServoPos Sets Spike Servo position
-     * @param direction Sets servo direction up/down | true = up, false = down
+     * @param spikeServoDirection Sets servo direction up/down | true = up, false = down
      */
-void spikeServoPos (boolean direction) {
-    if(direction) {
-        spikeMarkDrop.setPosition(.45); // up
-    } else if(!direction) {
-        spikeMarkDrop.setPosition(-.8); // down
+    public void spikeServoPos (boolean spikeServoDirection) {
+        if(spikeServoDirection) {
+            spikeMarkDrop.setPosition(.45); // up
+        } else if(!spikeServoDirection) {
+            spikeMarkDrop.setPosition(-.8); // down
+        }
     }
-}
+    public void boardPixelPos(boolean boardPixelDirection) {
+        if(boardPixelDirection) {
+            boardPixelDrop.setPosition(.45); // up
+        } else if(!boardPixelDirection) {
+            boardPixelDrop.setPosition(-.8); // down
+        }
 
-
+    }
 }

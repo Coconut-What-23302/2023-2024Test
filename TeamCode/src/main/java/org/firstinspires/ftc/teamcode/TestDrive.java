@@ -3,13 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 @TeleOp
 public class TestDrive extends LinearOpMode {
     RobotHardware robot = new RobotHardware();
+
     @Override
 
     // toggle vars
@@ -17,9 +15,9 @@ public class TestDrive extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot.init(hardwareMap);
 
-    boolean spikeServoCheck = false;
-
-
+        boolean spikeServoCheck = false;
+        boolean boardPixelCheck = false;
+        boolean hangCheck = false;
 
 
         waitForStart();
@@ -48,33 +46,50 @@ public class TestDrive extends LinearOpMode {
             robot.backRight.setPower(backRightPower);
 
             // non drive controls;
+            //hang control
+            if (gamepad1.x && !hangCheck) {
+                robot.hangPivot.setTargetPosition(robot.hangRaise);
+                robot.hangPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hangCheck = true; // goes up to hang
+            } else if (gamepad1.x && hangCheck) { // if it is already up, go down
+                robot.hangPivot.setTargetPosition(robot.hangDown);
+                robot.hangPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hangCheck = false;
+            }
+
+            if (gamepad1.dpad_up) {
+                robot.hangMotor.setPower(1);
+            } else if (gamepad1.dpad_down) {
+                robot.hangMotor.setPower(-1);
+            } else {
+                robot.hangMotor.setPower(0);
+            }
+
+            //intake control
+            if (gamepad1.left_bumper) {
+                robot.intakeMotor.setPower(robot.activeIntake);
+            } else if (gamepad1.right_bumper) {
+                robot.intakeMotor.setPower(robot.activeOuttake);
+            } else robot.intakeMotor.setPower(robot.OuttakeHold);
 
 
             //all manual overrides driver for 2
-    if(gamepad2.x == true && spikeServoCheck == false) {
-       robot.spikeServoPos(false);
-        spikeServoCheck = true; // goes down
-    } else if (gamepad2.x == true && spikeServoCheck == true) {
-        robot.spikeServoPos(true);
-        spikeServoCheck = false;
-    }
 
-//             manual overrides driver 2
+            if (gamepad2.x && !spikeServoCheck) {
+                robot.spikeServoPos(false);
+                spikeServoCheck = true; // goes down
+            } else if (gamepad2.x && spikeServoCheck) {
+                robot.spikeServoPos(true);
+                spikeServoCheck = false;
+            }
 
-
-
-
-
-        telemetry.addData("SPike Servo", robot.spikeMarkDrop.getPosition());
-            telemetry.update();
-
-
-
-
-
-
-
-
+            if (gamepad2.y && !boardPixelCheck) {
+                robot.boardPixelPos(false);
+                boardPixelCheck = true;
+            } else if (gamepad2.y && boardPixelCheck) {
+                robot.boardPixelPos(true);
+                boardPixelCheck = false;
+            }
 
 
         }
