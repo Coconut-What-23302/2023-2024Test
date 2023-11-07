@@ -17,7 +17,7 @@ public class TestDrive extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot.init(hardwareMap);
 
-
+    boolean spikeServoCheck = false;
 
 
 
@@ -50,27 +50,22 @@ public class TestDrive extends LinearOpMode {
             // non drive controls;
 
 
-            // logic to raise hang arm
-            if( (gamepad1.x == true) && (robot.hangDeployServo.getPosition() == .2) ) {
-                robot.hangDeployServo.setPosition(1);
-            } else if ( (gamepad1.x == true) && (robot.hangDeployServo.getPosition() == 1) ) {
-                robot.hangDeployServo.setPosition(.2);
-            } else if (gamepad1.x == true ) {
-                robot.hangDeployServo.setPosition(1);
-            }
+            //all manual overrides driver for 2
+    if(gamepad2.x == true && spikeServoCheck == false) {
+       robot.spikeServoPos(false);
+        spikeServoCheck = true; // goes down
+    } else if (gamepad2.x == true && spikeServoCheck == true) {
+        robot.spikeServoPos(true);
+        spikeServoCheck = false;
+    }
 
-            // manual overrides driver 2
-//            if( (gamepad2.x == true) && (robot.boardPixelDrop.getPosition() == 0) ) {
-//                robot.boardPixelDrop.setPosition(1);
-//            } else if ( (gamepad2.x == true) && (robot.boardPixelDrop.getPosition() == 1) ) {
-//                robot.boardPixelDrop.setPosition(0);
-//            } else if (gamepad2.x == true ) {
-//                robot.boardPixelDrop.setPosition(1);
-//            }
+//             manual overrides driver 2
 
 
 
-            telemetry.addData("Hang Servo", robot.hangDeployServo.getPosition());
+
+
+        telemetry.addData("SPike Servo", robot.spikeMarkDrop.getPosition());
             telemetry.update();
 
 

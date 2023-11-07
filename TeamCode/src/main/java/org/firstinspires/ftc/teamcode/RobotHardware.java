@@ -24,13 +24,14 @@ public class RobotHardware
 
     public DcMotor intakeMotor = null;
 
+    public DcMotor hangDCMotor = null;
+
 
 
 
     public Servo   spikeMarkDrop    = null;
     public Servo   boardPixelDrop     = null;
 
-    public Servo hangDeployServo = null;
 
 
 
@@ -53,6 +54,7 @@ public class RobotHardware
         frontRight = hwMap.dcMotor.get("frontRight");
         backRight = hwMap.dcMotor.get("backRight");
         intakeMotor = hwMap.dcMotor.get("spiny");
+        hangDCMotor = hwMap.dcMotor.get("hangRaise");
 
 
 
@@ -63,6 +65,9 @@ public class RobotHardware
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.FORWARD);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+        hangDCMotor.setDirection(DcMotor.Direction.FORWARD);
+
+
 
 
 
@@ -74,6 +79,7 @@ public class RobotHardware
         frontRight.setPower(0);
         backRight.setPower(0);
         intakeMotor.setPower(0);
+        hangDCMotor.setPower(0);
 
 
 
@@ -85,6 +91,7 @@ public class RobotHardware
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hangDCMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
 
@@ -95,56 +102,29 @@ public class RobotHardware
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        hangDCMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
         // Define and initialize all installed servos
         boardPixelDrop = hwMap.servo.get("board");
         spikeMarkDrop = hwMap.servo.get("spike");
-        hangDeployServo = hwMap.servo.get("hang");
 
-        // set servo default pos
-        hangDeployServo.setPosition(0);
-//        boardPixelDrop.setPosition(-1);
-
+        // set servo default pos;
+        spikeMarkDrop.setPosition(.45);
 
     }
-
     /**
-     * DrivePowerAll sets all of the drive train motors to the specified power level.
-     * @param power Power level to set all motors to
+     * spikeServoPos Sets Spike Servo position
+     * @param direction Sets servo direction up/down | true = up, false = down
      */
-    void DrivePowerAll (double power)
-    {
-        driveSetPower(power, power, power, power);
+void spikeServoPos (boolean direction) {
+    if(direction) {
+        spikeMarkDrop.setPosition(.45); // up
+    } else if(!direction) {
+        spikeMarkDrop.setPosition(-.8); // down
     }
-
-    /**
-     * driveSetPower sets all of the drive train motors to the specified power levels.
-     * @param flPower Power level to set front left motor to
-     * @param frPower Power level to set front right motor to
-     * @param blPower Power level to set back left motor to
-     * @param brPower Power level to set back right motor to
-     */
-    void driveSetPower (double flPower, double frPower, double blPower, double brPower)
-    {
-        frontLeft.setPower(flPower);
-        frontRight.setPower(frPower);
-        backLeft.setPower(blPower);
-        backRight.setPower(brPower);
-    }
-
-    /**
-     * driveSetMode sets all of the drive train motors to the specified mode.
-     * @param runmode RunMode to set motors to
-     */
-    void driveSetMode(DcMotor.RunMode runmode)
-    {
-        frontLeft.setMode(runmode);
-        frontRight.setMode(runmode);
-        backLeft.setMode(runmode);
-        backRight.setMode(runmode);
-    }
+}
 
 
 }

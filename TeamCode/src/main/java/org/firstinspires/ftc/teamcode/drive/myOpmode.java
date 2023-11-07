@@ -1,63 +1,58 @@
-package org.firstinspires.ftc.teamcode.drive.opmode;
+package org.firstinspires.ftc.teamcode.drive;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.acmerobotics.roadrunner.*;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 /*
  * This is an example of a more complex path to really test the tuning.
  */
-@Autonomous(group = "drive")
+@Autonomous
 
 public class myOpmode extends LinearOpMode {
-
-    RobotHardware robot = new RobotHardware();
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        RobotHardware robot = new RobotHardware();
         robot.init(hardwareMap);
 
-
-
-
-        waitForStart();
-
-        if (isStopRequested()) return;
-
         Pose2d startPose = new Pose2d(-39, -70, Math.toRadians(90));
+
         drive.setPoseEstimate(startPose);
 
-        Trajectory untitled0 = drive.trajectoryBuilder(startPose)
-                //
-                .splineToLinearHeading(new Pose2d(-57.61, -36.98, Math.toRadians(70.94)), Math.toRadians(70.94))
-                .splineToLinearHeading(new Pose2d(-36.00, -23.00, Math.toRadians(0.00)), Math.toRadians(0.00))
+        TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(startPose)
+//
+
+
+                // path to the middle spike mark
+                .splineToLinearHeading(new Pose2d(-36.00, -22.00, Math.toRadians(0.00)), Math.toRadians(0.00))
                 .addDisplacementMarker(() -> {
-                    // drop the servo which i totally did not break
+                                    robot.spikeMarkDrop.setPosition(-.8);
                 })
-                .lineTo(new Vector2d(-40.61, -14.75))
-                .splineToConstantHeading(new Vector2d(-28.55, -9.52), Math.toRadians(8.87))
-                .splineToConstantHeading(new Vector2d(-16.06, -13.15), Math.toRadians(-9.82))
-                .splineToConstantHeading(new Vector2d(-4.00, -10.53), Math.toRadians(15.87))
-                .splineToConstantHeading(new Vector2d(7.63, -9.52), Math.toRadians(10.45))
-                .splineToConstantHeading(new Vector2d(17.22, -16.20), Math.toRadians(7.22))
-                .splineToConstantHeading(new Vector2d(28.99, -10.97), Math.toRadians(30.68))
-                .splineToConstantHeading(new Vector2d(33.35, -8.06), Math.toRadians(42.85))
-                .splineToConstantHeading(new Vector2d(27.39, -65.17), Math.toRadians(252.09))
-                .lineToSplineHeading(new Pose2d(47.73, -35.24, Math.toRadians(180.00)))
-                //
+                .waitSeconds(.6)
+                .addDisplacementMarker(() -> {
+                                    robot.spikeMarkDrop.setPosition(.45);
+                })
+                .waitSeconds(.6)
+                .splineToLinearHeading(new Pose2d(-37.79, -10.92, Math.toRadians(0.00)), Math.toRadians(0.00))
+                .splineToLinearHeading(new Pose2d(35.71, -13.20, Math.toRadians(-90.00)), Math.toRadians(0.00))
+                .lineToLinearHeading(new Pose2d(36.48, -37.06, Math.toRadians(-61.00)))
+                .splineToLinearHeading(new Pose2d(53.00, -40.00, Math.toRadians(180.00)), Math.toRadians(180.00))
+
                 .build();
+        waitForStart();
+        if(isStopRequested()) return;
 
-
-
-        drive.followTrajectory(untitled0);
-
-
+        drive.followTrajectorySequence(untitled0);
 
     }
 }

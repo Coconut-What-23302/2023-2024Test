@@ -18,15 +18,22 @@ public class MeepMeepTesting {
                         drive.trajectorySequenceBuilder(new Pose2d(-39, -70, Math.toRadians(90)))
 
                                 // don't touch
+                                .splineToLinearHeading(new Pose2d(-36.00, -22.00, Math.toRadians(0.00)), Math.toRadians(0.00))
+                                .addDisplacementMarker(() -> {
+//                                    robot.spikeMarkDrop.setPosition(-.8);
+                                })
+                                .waitSeconds(.6)
+                                .addDisplacementMarker(() -> {
+//                                    robot.spikeMarkDrop.setPosition(.5);
+                                })
+                                .waitSeconds(.6)
+                                .splineToLinearHeading(new Pose2d(-37.79, -10.92, Math.toRadians(0.00)), Math.toRadians(0.00))
+                                .splineToLinearHeading(new Pose2d(35.71, -13.20, Math.toRadians(-90.00)), Math.toRadians(0.00))
+                                .lineToLinearHeading(new Pose2d(36.48, -37.06, Math.toRadians(-61.00)))
+                                .splineToLinearHeading(new Pose2d(53.00, -40.00, Math.toRadians(180.00)), Math.toRadians(180.00))
 
-//                                .splineToConstantHeading(new Vector2d(-55.73, -34.66), Math.toRadians(115.52))
 
-//                                .lineToSplineHeading(new Pose2d(-35.67, -23.18, Math.toRadians(0.00)))
-//                                .splineToConstantHeading(new Vector2d(-38.29, -13.01), Math.toRadians(93.53))
-//                                .splineToConstantHeading(new Vector2d(-7.63, -11.26), Math.toRadians(25.47))
-//                                .splineToConstantHeading(new Vector2d(4.14, -10.97), Math.toRadians(77.81))
-//                                .splineToConstantHeading(new Vector2d(30.73, -16.20), Math.toRadians(-23.51))
-//                                .lineToSplineHeading(new Pose2d(53.55, -34.95, Math.toRadians(180.00)))
+
 //                                6s
 
 //                                .splineToConstantHeading(new Vector2d(-60.67, -54.42), Math.toRadians(87.53))
