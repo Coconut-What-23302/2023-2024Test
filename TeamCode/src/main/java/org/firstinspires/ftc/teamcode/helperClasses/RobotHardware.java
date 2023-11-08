@@ -31,7 +31,7 @@ public class RobotHardware
 
     // final variables
 
-    public final double intakeDefaultPower = -.5;
+    public final double intakeDefaultPower = -.3;
     public final double fullOuttake = 1;
     public final double fullIntake = -1;
 
@@ -119,8 +119,9 @@ public class RobotHardware
         spikeMarkDrop = hwMap.servo.get("spike");
 
         // set servo default pos;
-//        spikeMarkDrop.setPosition(.45);
-//        boardPixelDrop.setPosition(.8);
+        spikeMarkDrop.setPosition(.5);
+
+        boardPixelDrop.setPosition(1);
 
     }
     /**
@@ -129,9 +130,9 @@ public class RobotHardware
      */
 public void spikeServoPos (boolean direction) {
     if(direction) {
-        spikeMarkDrop.setPosition(.2); // up
+        spikeMarkDrop.setPosition(.48); // up
     } else if(!direction) {
-        spikeMarkDrop.setPosition(.55); // down
+        spikeMarkDrop.setPosition(.22); // down
     }
 }
     /**
