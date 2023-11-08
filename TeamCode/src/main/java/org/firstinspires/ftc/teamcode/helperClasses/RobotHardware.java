@@ -119,8 +119,8 @@ public class RobotHardware
         spikeMarkDrop = hwMap.servo.get("spike");
 
         // set servo default pos;
-        spikeMarkDrop.setPosition(.45);
-        boardPixelDrop.setPosition(.8);
+//        spikeMarkDrop.setPosition(.45);
+//        boardPixelDrop.setPosition(.8);
 
     }
     /**
@@ -129,9 +129,9 @@ public class RobotHardware
      */
 public void spikeServoPos (boolean direction) {
     if(direction) {
-        spikeMarkDrop.setPosition(.45); // up
+        spikeMarkDrop.setPosition(.2); // up
     } else if(!direction) {
-        spikeMarkDrop.setPosition(-.7); // down
+        spikeMarkDrop.setPosition(.55); // down
     }
 }
     /**
@@ -140,9 +140,9 @@ public void spikeServoPos (boolean direction) {
      */
     public void boardPixelServoPos (boolean direction) {
         if(direction) {
-            boardPixelDrop.setPosition(.7); // up
+            boardPixelDrop.setPosition(1); // up
         } else if(!direction) {
-            boardPixelDrop.setPosition(.3); // down
+            boardPixelDrop.setPosition(.5); // down
         }
     }
     public void hangPivotPos (boolean direction) {
