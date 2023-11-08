@@ -2,13 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.helperClasses.RobotHardware;
 
 @TeleOp
-public class TestDrive extends LinearOpMode {
+public class CWTeleop extends LinearOpMode {
     RobotHardware robot = new RobotHardware();
     @Override
 
@@ -49,32 +47,41 @@ public class TestDrive extends LinearOpMode {
             robot.backRight.setPower(backRightPower);
 
             // non drive controls;
+            if(gamepad1.right_bumper) {
+                robot.intakeMotor.setPower(robot.fullOuttake);
+            } else if (gamepad1.left_bumper) {
+                robot.intakeMotor.setPower(robot.fullIntake);
+            } else {
+                robot.intakeMotor.setPower(robot.intakeDefaultPower);
+            }
+
+            if (gamepad1.dpad_up) {
+                robot.hangLeadScrewMotor.setPower(1);
+            } else if (gamepad1.dpad_down) {
+                robot.hangLeadScrewMotor.setPower(-1);
+            } else {
+                robot.hangLeadScrewMotor.setPower(0);
+            }
 
 
             //all manual overrides driver for 2
-    if(gamepad2.x == true && spikeServoCheck == false) {
+    if(gamepad2.x && !spikeServoCheck) {
        robot.spikeServoPos(false);
         spikeServoCheck = true; // goes down
-    } else if (gamepad2.x == true && spikeServoCheck == true) {
+    } else if (gamepad2.x && spikeServoCheck) {
         robot.spikeServoPos(true);
         spikeServoCheck = false;
     }
 
-    if(gamepad2.y == true && boardServoCheck == false) {
+    if(gamepad2.y && !boardServoCheck) {
        robot.boardPixelServoPos(false);
         boardServoCheck = true; // goes down
-    } else if (gamepad2.y == true && boardServoCheck == true) {
+    } else if (gamepad2.y && boardServoCheck) {
         robot.boardPixelServoPos(true);
         boardServoCheck = false;
     }
 
-    if(gamepad1.right_bumper == true) {
-        robot.intakeMotor.setPower(robot.fullOuttake);
-    } else if (gamepad1.left_bumper == true) {
-        robot.intakeMotor.setPower(robot.fullIntake);
-    } else {
-        robot.intakeMotor.setPower(robot.intakeDefaultPower);
-    }
+
 
 
 //             manual overrides driver 2
