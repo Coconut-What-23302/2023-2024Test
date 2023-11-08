@@ -13,9 +13,6 @@ import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-/*
- * This is an example of a more complex path to really test the tuning.
- */
 @Autonomous
 
 public class myOpmode extends LinearOpMode {
@@ -35,17 +32,10 @@ public class myOpmode extends LinearOpMode {
 
                 // path to the middle spike mark
                 .splineToLinearHeading(new Pose2d(-36.00, -22.00, Math.toRadians(0.00)), Math.toRadians(0.00))
-                .addDisplacementMarker(() -> {
-                                    robot.spikeMarkDrop.setPosition(-.8);
-                })
-                .waitSeconds(.6)
-                .addDisplacementMarker(() -> {
-                                    robot.spikeMarkDrop.setPosition(.45);
-                })
-                .waitSeconds(.6)
                 .splineToLinearHeading(new Pose2d(-37.79, -10.92, Math.toRadians(0.00)), Math.toRadians(0.00))
                 .splineToLinearHeading(new Pose2d(35.71, -13.20, Math.toRadians(-90.00)), Math.toRadians(0.00))
-                .lineToLinearHeading(new Pose2d(36.48, -37.06, Math.toRadians(-61.00)))
+                .lineToLinearHeading(new Pose2d(34.44, -35.01, Math.toRadians(-61.00)))
+                .splineToLinearHeading(new Pose2d(36.48, -41.31, Math.toRadians(10.60)), Math.toRadians(10.60))
                 .splineToLinearHeading(new Pose2d(53.00, -40.00, Math.toRadians(180.00)), Math.toRadians(180.00))
 
                 .build();

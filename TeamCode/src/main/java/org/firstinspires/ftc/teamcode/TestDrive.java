@@ -18,6 +18,7 @@ public class TestDrive extends LinearOpMode {
         robot.init(hardwareMap);
 
     boolean spikeServoCheck = false;
+    boolean boardServoCheck = false;
 
 
 
@@ -59,13 +60,30 @@ public class TestDrive extends LinearOpMode {
         spikeServoCheck = false;
     }
 
+    if(gamepad2.y == true && boardServoCheck == false) {
+       robot.boardPixelServoPos(false);
+        boardServoCheck = true; // goes down
+    } else if (gamepad2.y == true && boardServoCheck == true) {
+        robot.boardPixelServoPos(true);
+        boardServoCheck = false;
+    }
+
+    if(gamepad1.right_bumper == true) {
+        robot.intakeMotor.setPower(robot.fullOuttake);
+    } else if (gamepad1.left_bumper == true) {
+        robot.intakeMotor.setPower(robot.fullIntake);
+    } else {
+        robot.intakeMotor.setPower(robot.intakeDefaultPower);
+    }
+
+
 //             manual overrides driver 2
 
 
 
 
 
-        telemetry.addData("SPike Servo", robot.spikeMarkDrop.getPosition());
+        telemetry.addData("board Servo", robot.boardPixelDrop.getPosition());
             telemetry.update();
 
 
