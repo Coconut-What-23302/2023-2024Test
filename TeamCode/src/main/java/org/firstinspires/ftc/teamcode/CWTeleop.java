@@ -17,6 +17,7 @@ public class CWTeleop extends LinearOpMode {
 
     boolean spikeServoCheck = false;
     boolean boardServoCheck = false;
+    boolean hangPivotCheck = false;
 
 
 
@@ -64,6 +65,15 @@ public class CWTeleop extends LinearOpMode {
             }
 
 
+            if(gamepad1.x && !hangPivotCheck) {
+                robot.hangPivotPos(true);
+                hangPivotCheck = true; // goes up
+            } else if (gamepad1.x && hangPivotCheck) {
+                robot.hangPivotPos(false);
+                hangPivotCheck = false;
+            }
+
+
             //all manual overrides driver for 2
     if(gamepad2.x && !spikeServoCheck) {
        robot.spikeServoPos(false);
@@ -84,13 +94,15 @@ public class CWTeleop extends LinearOpMode {
 
 
 
+
+
 //             manual overrides driver 2
 
 
 
 
 
-        telemetry.addData("board Servo", robot.boardPixelDrop.getPosition());
+        telemetry.addData("Hang Motor", robot.hangPivotMotor.getCurrentPosition());
             telemetry.update();
 
 

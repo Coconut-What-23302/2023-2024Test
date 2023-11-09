@@ -31,9 +31,12 @@ public class RobotHardware
 
     // final variables
 
-    public final double intakeDefaultPower = -.3;
+    public final double intakeDefaultPower = -.55;
     public final double fullOuttake = 1;
     public final double fullIntake = -1;
+
+    public final int pivotUp = 343;
+    public final int pivotDown = -1;
 
 
 
@@ -85,7 +88,8 @@ public class RobotHardware
         backRight.setPower(0);
         intakeMotor.setPower(0);
         hangLeadScrewMotor.setPower(0);
-        hangPivotMotor.setPower(0);
+        hangPivotMotor.setPower(1);
+
 
 
 
@@ -101,6 +105,8 @@ public class RobotHardware
         hangPivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
+        hangPivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
 
         // Set almost all motors to run with encoders
@@ -110,7 +116,6 @@ public class RobotHardware
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         hangLeadScrewMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        hangPivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -146,12 +151,16 @@ public void spikeServoPos (boolean direction) {
             boardPixelDrop.setPosition(.5); // down
         }
     }
+    /**
+     * hangPivotPos Sets hang motor position
+     * @param direction Sets motor direction up/down | true = up, false = down
+     */
     public void hangPivotPos (boolean direction) {
         if(direction) {
-           hangPivotMotor.setTargetPosition(1000); // up
+           hangPivotMotor.setTargetPosition(pivotUp); // up
             hangPivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } else if(!direction) {
-            hangPivotMotor.setTargetPosition(0); // down
+            hangPivotMotor.setTargetPosition(pivotDown); // down
             hangPivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
     }

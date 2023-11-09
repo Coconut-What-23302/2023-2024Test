@@ -2,19 +2,20 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.helperClasses.PoseStorage;
 import org.firstinspires.ftc.teamcode.helperClasses.RobotHardware;
-import org.firstinspires.ftc.teamcode.helperClasses.AutonomousTrajectories;
+import org.firstinspires.ftc.teamcode.helperClasses.homeTrajectories;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-@Autonomous
+@TeleOp
 
-public class CWAuto extends LinearOpMode {
+public class returnHome extends LinearOpMode {
 
 
     int startLocation = -1;
@@ -46,7 +47,7 @@ public class CWAuto extends LinearOpMode {
             boolean currentDPadLeft = gamepad1.dpad_left;
             boolean currentDPadRight = gamepad1.dpad_right;
             if(startLocation == -1) {
-                telemetry.addLine("Select Robot Start Location");
+                telemetry.addLine("Select Home to Return to");
                 telemetry.update();
                 if (currentDPadUp && !previousDPadUp) {
                     startLocation = 0;
@@ -68,7 +69,7 @@ public class CWAuto extends LinearOpMode {
         }
 
 // Display the correct robot start location
-        telemetry.addData("Select Robot Start Location", startLocationText.get(startLocation));
+        telemetry.addData("Select Home", startLocationText.get(startLocation));
         telemetry.update();
 
         /*
@@ -78,47 +79,47 @@ public class CWAuto extends LinearOpMode {
         if(isStopRequested()) return;
 
 
-
-
-
         switch(startLocation) {
             case 0:
                 // If start location is 0, execute Backstage Red Trajectory
-                TrajectorySequence backstageRedTrajectory = AutonomousTrajectories.createBackstageRedTrajectory(drive, robot);
-                drive.followTrajectorySequence(backstageRedTrajectory);
-                robot.boardPixelServoPos(false);
-                sleep(800);
-                robot.boardPixelServoPos(true);
-                sleep(1000);
-                telemetry.addLine("Backstage Red Trajectory Executed");
-                telemetry.update();
-                sleep(1000);
+                TrajectorySequence backstageRedHomeTrajectory = homeTrajectories.returnHomeBRTrajectory(drive, robot);
+                drive.followTrajectorySequence(backstageRedHomeTrajectory);
                 break;
             case 1:
-                TrajectorySequence backstageBlueTrajectory = AutonomousTrajectories.createBackstageBlueTrajectory(drive, robot);
-                drive.followTrajectorySequence(backstageBlueTrajectory);
-                robot.boardPixelServoPos(false);
-                sleep(800);
-                robot.boardPixelServoPos(true);
-                sleep(1000);
-                telemetry.addLine("Backstage Blue Trajectory Executed");
-                telemetry.update();
-                sleep(1000);
-
+                TrajectorySequence backstageBlueHomeTrajectory = homeTrajectories.returnHomeBBTrajectory(drive, robot);
+                drive.followTrajectorySequence(backstageBlueHomeTrajectory);
                 break;
             case 2:
-                // If start location is 2, run frontstage Red Trajectory
-
+                TrajectorySequence frontstageRedHomeTrajectory = homeTrajectories.returnHomeFRTrajectory(drive, robot);
+                drive.followTrajectorySequence(frontstageRedHomeTrajectory);
                 break;
             case 3:
-                // If start location is 3, run Frontstage Blue Trajectory
+                TrajectorySequence frontstageBlueHomeTrajectory = homeTrajectories.returnHomeFBTrajectory(drive, robot);
+                drive.followTrajectorySequence(frontstageBlueHomeTrajectory);
+                break;
+        }
+        while (opModeIsActive()) {
+            double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
+            double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+            double rx = gamepad1.right_stick_x;
 
-                break;
-            default:
-                // Handle any and all other unhandled cases and default to backstage red (though should not ever happen)
-                break;
+
+            // Denominator is the largest motor power (absolute value) or 1
+            // This ensures all the powers maintain the same ratio,
+            // but only if at least one is out of the range [-1, 1]
+            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            double frontLeftPower = (y + x + rx) / denominator;
+            double backLeftPower = (y - x + rx) / denominator;
+            double frontRightPower = (y - x - rx) / denominator;
+            double backRightPower = (y + x - rx) / denominator;
+
+            robot.frontLeft.setPower(frontLeftPower);
+            robot.backLeft.setPower(backLeftPower);
+            robot.frontRight.setPower(frontRightPower);
+            robot.backRight.setPower(backRightPower);
+
+        }
+
 
     }
-        PoseStorage.transferedPose = drive.getPoseEstimate(); // transfer pose between op modes
-}
 }

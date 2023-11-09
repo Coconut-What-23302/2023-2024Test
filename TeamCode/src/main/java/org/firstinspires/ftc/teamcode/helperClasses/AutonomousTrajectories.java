@@ -15,12 +15,13 @@ public class AutonomousTrajectories {
 
         return drive.trajectorySequenceBuilder(startPose)
                 .splineToLinearHeading(new Pose2d(-36.20, -22.50, Math.toRadians(0.00)), Math.toRadians(0.00))
+                .splineToLinearHeading(new Pose2d(-36.20, -22.50, Math.toRadians(0.00)), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(.01, () -> {
-                    robot.spikeMarkDrop.setPosition(-.7);
+//                                            robot.spikeMarkDrop.setPosition(-.7);
                 })
                 .waitSeconds(.8)
                 .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
-                    robot.spikeMarkDrop.setPosition(.45);
+//                                            robot.spikeMarkDrop.setPosition(.45);
                 })
                 .splineToLinearHeading(new Pose2d(-32.75, -12.43, Math.toRadians(-3.02)), Math.toRadians(-3.02))
                 .splineToLinearHeading(new Pose2d(9.47, -10.65, Math.toRadians(-19.62)), Math.toRadians(-19.62))
@@ -66,4 +67,49 @@ public class AutonomousTrajectories {
         //  trajectory logic for Frontstage Blue
         return null;
     }
+
+    public static TrajectorySequence returnHomeBRTrajectory(SampleMecanumDrive drive, RobotHardware robot) {
+        drive.setPoseEstimate(PoseStorage.transferedPose);
+
+        return drive.trajectorySequenceBuilder(PoseStorage.transferedPose)
+                .lineToLinearHeading(new Pose2d(33.50, -11.04, Math.toRadians(107.41)))
+                .lineToLinearHeading(new Pose2d(-41.61, -10.66, Math.toRadians(179.71)))
+                .lineToLinearHeading(new Pose2d(-39.00, -70.00, Math.toRadians(90.00)))
+                .build();
+
+    }
+
+    public static TrajectorySequence returnHomeBBTrajectory(SampleMecanumDrive drive, RobotHardware robot) {
+        drive.setPoseEstimate(PoseStorage.transferedPose);
+
+        return drive.trajectorySequenceBuilder(PoseStorage.transferedPose)
+             //insert trajectory logic here
+                .build();
+
+    }
+
+    public static TrajectorySequence returnHomeFRTrajectory(SampleMecanumDrive drive, RobotHardware robot) {
+        drive.setPoseEstimate(PoseStorage.transferedPose);
+
+        return drive.trajectorySequenceBuilder(PoseStorage.transferedPose)
+                //insert trajectory logic here
+                .build();
+
+    }
+
+    public static TrajectorySequence returnHomeFBTrajectory(SampleMecanumDrive drive, RobotHardware robot) {
+        drive.setPoseEstimate(PoseStorage.transferedPose);
+
+        return drive.trajectorySequenceBuilder(PoseStorage.transferedPose)
+                //insert trajectory logic here
+                .build();
+
+    }
+
+
+// class close
 }
+
+
+
+
