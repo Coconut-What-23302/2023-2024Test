@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.helperClasses.PoseStorage;
 import org.firstinspires.ftc.teamcode.helperClasses.RobotHardware;
@@ -119,6 +120,9 @@ public class CWAuto extends LinearOpMode {
                 break;
 
     }
+        telemetry.addData("distance Motor Right", robot.rightDistanceSensor.getDistance(DistanceUnit.INCH));
+        telemetry.addData("distance Motor left", robot.leftDistanceSensor.getDistance(DistanceUnit.INCH));
+        telemetry.update();
         PoseStorage.transferedPose = drive.getPoseEstimate(); // transfer pose between op modes
 }
 }

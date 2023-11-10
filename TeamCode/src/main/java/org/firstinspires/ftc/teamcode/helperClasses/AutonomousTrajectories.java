@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.helperClasses;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.*;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -13,23 +14,35 @@ public class AutonomousTrajectories {
     public static TrajectorySequence createBackstageRedTrajectory(SampleMecanumDrive drive, RobotHardware robot) {
         Pose2d startPose = new Pose2d(-39, -70, Math.toRadians(90));
 
+        drive.setPoseEstimate(startPose);
+
         return drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(-36.20, -22.50, Math.toRadians(0.00)), Math.toRadians(0.00))
-                .splineToLinearHeading(new Pose2d(-36.20, -22.50, Math.toRadians(0.00)), Math.toRadians(0.00))
-                .UNSTABLE_addTemporalMarkerOffset(.01, () -> {
-//                                            robot.spikeMarkDrop.setPosition(-.7);
-                })
-                .waitSeconds(.8)
+
+                .splineToLinearHeading(new Pose2d(-38.5, -24.00, Math.toRadians(0.00)), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
-//                                            robot.spikeMarkDrop.setPosition(.45);
+                    robot.spikeServoPos(false);
                 })
-                .splineToLinearHeading(new Pose2d(-32.75, -12.43, Math.toRadians(-3.02)), Math.toRadians(-3.02))
-                .splineToLinearHeading(new Pose2d(9.47, -10.65, Math.toRadians(-19.62)), Math.toRadians(-19.62))
-                .splineToLinearHeading(new Pose2d(39.45, -21.50, Math.toRadians(-90.00)), Math.toRadians(-80.00))
-                .splineToLinearHeading(new Pose2d(53.00, -41.50, Math.toRadians(-180.00)), Math.toRadians(0.00))
+                .waitSeconds(.5)
+                .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
+                    robot.spikeServoPos(true);
+                })
+                .lineToLinearHeading(new Pose2d(-36.79, -12.79, Math.toRadians(-240.00)))
+                .lineToLinearHeading(new Pose2d(33.93, -14.40, Math.toRadians(-180.00)))
+                .lineToConstantHeading(new Vector2d(34.76, -36.54))
+                .setAccelConstraint(new TrajectoryAccelerationConstraint() {
+                    @Override
+                    public double get(double v, @NonNull Pose2d pose2d, @NonNull Pose2d pose2d1, @NonNull Pose2d pose2d2) {
+                        return 10;
+                    }
+                })
+                .splineToLinearHeading(new Pose2d(53.00, -44, Math.toRadians(-180.00)), Math.toRadians(-180.00))
+
+
+
+
+
                 .build();
     }
-
     public static TrajectorySequence createBackstageBlueTrajectory(SampleMecanumDrive drive, RobotHardware robot) {
         Pose2d startPose = new Pose2d(-39, 70, Math.toRadians(-90));
 

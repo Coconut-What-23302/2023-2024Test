@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.helperClasses;
 //import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -28,15 +30,15 @@ public class RobotHardware
 
     public Servo   spikeMarkDrop    = null;
     public Servo   boardPixelDrop     = null;
+    public DistanceSensor leftDistanceSensor = null;
+    public DistanceSensor rightDistanceSensor = null;
 
     // final variables
 
-    public final double intakeDefaultPower = -.55;
+    public final double intakeDefaultPower = 0;
     public final double fullOuttake = 1;
     public final double fullIntake = -1;
 
-    public final int pivotUp = 343;
-    public final int pivotDown = -1;
 
 
 
@@ -73,7 +75,7 @@ public class RobotHardware
         backRight.setDirection(DcMotor.Direction.FORWARD);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
         hangLeadScrewMotor.setDirection(DcMotor.Direction.FORWARD);
-        hangPivotMotor.setDirection(DcMotor.Direction.FORWARD);
+        hangPivotMotor.setDirection(DcMotor.Direction.REVERSE);
 
 
 
@@ -88,7 +90,7 @@ public class RobotHardware
         backRight.setPower(0);
         intakeMotor.setPower(0);
         hangLeadScrewMotor.setPower(0);
-        hangPivotMotor.setPower(1);
+        hangPivotMotor.setPower(0);
 
 
 
@@ -105,7 +107,6 @@ public class RobotHardware
         hangPivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
-        hangPivotMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
 
@@ -116,6 +117,7 @@ public class RobotHardware
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         hangLeadScrewMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        hangPivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
 
@@ -124,9 +126,14 @@ public class RobotHardware
         spikeMarkDrop = hwMap.servo.get("spike");
 
         // set servo default pos;
-        spikeMarkDrop.setPosition(.5);
+        spikeMarkDrop.setPosition(.6);
 
         boardPixelDrop.setPosition(1);
+
+
+        // define and init sensors
+        leftDistanceSensor = hwMap.get(DistanceSensor.class, "leftDistance");
+        rightDistanceSensor = hwMap.get(DistanceSensor.class, "rightDistance");
 
     }
     /**
@@ -135,7 +142,7 @@ public class RobotHardware
      */
 public void spikeServoPos (boolean direction) {
     if(direction) {
-        spikeMarkDrop.setPosition(.48); // up
+        spikeMarkDrop.setPosition(.6); // up
     } else if(!direction) {
         spikeMarkDrop.setPosition(.22); // down
     }
@@ -148,22 +155,22 @@ public void spikeServoPos (boolean direction) {
         if(direction) {
             boardPixelDrop.setPosition(1); // up
         } else if(!direction) {
-            boardPixelDrop.setPosition(.5); // down
+            boardPixelDrop.setPosition(0); // down
         }
     }
     /**
      * hangPivotPos Sets hang motor position
      * @param direction Sets motor direction up/down | true = up, false = down
      */
-    public void hangPivotPos (boolean direction) {
-        if(direction) {
-           hangPivotMotor.setTargetPosition(pivotUp); // up
-            hangPivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        } else if(!direction) {
-            hangPivotMotor.setTargetPosition(pivotDown); // down
-            hangPivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
-    }
+//    public void hangPivotPos (boolean direction) {
+//        if(direction) {
+//           hangPivotMotor.setTargetPosition(pivotUp); // up
+//            hangPivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        } else if(!direction) {
+//            hangPivotMotor.setTargetPosition(pivotDown); // down
+//            hangPivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        }
+//    }
 
 
 

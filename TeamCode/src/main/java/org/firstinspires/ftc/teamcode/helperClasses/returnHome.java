@@ -119,7 +119,7 @@ public class returnHome extends LinearOpMode {
             robot.backRight.setPower(backRightPower);
 
         }
-
+        PoseStorage.transferedPose = drive.getPoseEstimate(); // transfer pose between op modes
 
     }
 }

@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.helperClasses.PoseStorage;
 import org.firstinspires.ftc.teamcode.helperClasses.RobotHardware;
 
 @TeleOp
@@ -17,7 +20,7 @@ public class CWTeleop extends LinearOpMode {
 
     boolean spikeServoCheck = false;
     boolean boardServoCheck = false;
-    boolean hangPivotCheck = false;
+//    boolean hangPivotCheck = false;
 
 
 
@@ -41,13 +44,15 @@ public class CWTeleop extends LinearOpMode {
             double backLeftPower = (y - x + rx) / denominator;
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
-
+            double hangPivotPower = gamepad2.left_stick_y;
             robot.frontLeft.setPower(frontLeftPower);
             robot.backLeft.setPower(backLeftPower);
             robot.frontRight.setPower(frontRightPower);
             robot.backRight.setPower(backRightPower);
 
             // non drive controls;
+            robot.hangPivotMotor.setPower(hangPivotPower); // set hang pivot motor to negative power of
+
             if(gamepad1.right_bumper) {
                 robot.intakeMotor.setPower(robot.fullOuttake);
             } else if (gamepad1.left_bumper) {
@@ -65,13 +70,6 @@ public class CWTeleop extends LinearOpMode {
             }
 
 
-            if(gamepad1.x && !hangPivotCheck) {
-                robot.hangPivotPos(true);
-                hangPivotCheck = true; // goes up
-            } else if (gamepad1.x && hangPivotCheck) {
-                robot.hangPivotPos(false);
-                hangPivotCheck = false;
-            }
 
 
             //all manual overrides driver for 2
@@ -96,14 +94,19 @@ public class CWTeleop extends LinearOpMode {
 
 
 
+
+
 //             manual overrides driver 2
 
 
 
 
 
-        telemetry.addData("Hang Motor", robot.hangPivotMotor.getCurrentPosition());
+    telemetry.addData("distance Motor Right", robot.rightDistanceSensor.getDistance(DistanceUnit.INCH));
+            telemetry.addData("distance Motor left", robot.leftDistanceSensor.getDistance(DistanceUnit.INCH));
             telemetry.update();
+
+
 
 
 
