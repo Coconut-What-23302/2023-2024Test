@@ -36,8 +36,8 @@ public class RobotHardware
     // final variables
 
     public final double intakeDefaultPower = 0;
-    public final double fullOuttake = 1;
-    public final double fullIntake = -1;
+    public final double fullOuttake = .8;
+    public final double fullIntake = -.8;
 
 
 

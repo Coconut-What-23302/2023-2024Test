@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -8,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.helperClasses.PoseStorage;
 import org.firstinspires.ftc.teamcode.helperClasses.RobotHardware;
-import org.firstinspires.ftc.teamcode.helperClasses.homeTrajectories;
+import org.firstinspires.ftc.teamcode.helperClasses.AutoPaths.homeTrajectories;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.Dictionary;
 import java.util.Hashtable;

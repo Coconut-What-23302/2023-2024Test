@@ -1,12 +1,10 @@
-package org.firstinspires.ftc.teamcode.helperClasses;
-
-import androidx.annotation.NonNull;
+package org.firstinspires.ftc.teamcode.helperClasses.AutoPaths;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
-import com.acmerobotics.roadrunner.*;
+
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.helperClasses.PoseStorage;
 import org.firstinspires.ftc.teamcode.helperClasses.RobotHardware;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -16,7 +14,7 @@ public class homeTrajectories {
 
         return drive.trajectorySequenceBuilder(PoseStorage.transferedPose)
                 .lineToLinearHeading(new Pose2d(33.50, -11.04, Math.toRadians(107.41)))
-                .lineToLinearHeading(new Pose2d(-41.61, -10.66, Math.toRadians(179.71)))
+                .lineToLinearHeading(new Pose2d(-41.61, -12, Math.toRadians(179.71)))
                 .lineToLinearHeading(new Pose2d(-39.00, -70.00, Math.toRadians(90.00)))
                 .build();
 
