@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.helperClasses.AutoPaths.frontstageRed;
 import org.firstinspires.ftc.teamcode.helperClasses.PoseStorage;
 import org.firstinspires.ftc.teamcode.helperClasses.RobotHardware;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -23,11 +24,35 @@ public class CWAuto extends LinearOpMode {
 
 
     int startLocation = -1;
-    int spikeLocation = 2;
+    int spikeLocation = 0;
     boolean startVarsPicked = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+
+
+        final OpenCvAbstraction  opencv = new OpenCvAbstraction(this);
+        final PropDetector tseDetector = new PropDetector(telemetry, PropColors.Red);
+        
+        
+
+        opencv.init(hardwareMap);
+        opencv.setInternalCamera(false);
+        opencv.setCameraName("Webcam 1");
+        opencv.setCameraOrientation(OpenCvCameraRotation.UPRIGHT);
+        opencv.onNewFrame(tseDetector::processFrame);
+
+
+
+
+
+
+
+
+
+
+
 // Define variables to track previous DPad which is false
         boolean previousDPadUp = false;
         boolean previousDPadDown = false;
@@ -78,83 +103,96 @@ public class CWAuto extends LinearOpMode {
         telemetry.addData("Select Robot Start Location", startLocationText.get(startLocation));
         telemetry.update();
 
+
+
+
         /*
          *   Division between main code loop and initialization code because i'm blind
          */
         waitForStart();
         if (isStopRequested()) return;
 
+        tseDetector.getPropPosition();
+        telemetry.addData("Prop Position", tseDetector.getPropPosition());
+        telemetry.update();
 
-        switch (startLocation) { // start outer switch statement for location relative to field (backstage red, backstage blue, frontstage red, frontstage blue)
-            case 0: //
-                // If start location is 0, execute Backstage Red Trajectory
-                switch (spikeLocation) { //  start inner switch statement for spike location
-                    case 0: // spike is on the left
-                        TrajectorySequence spikeLeftTrajectory = backstageRed.Left(drive, robot);
-                        drive.followTrajectorySequence(spikeLeftTrajectory);
-                        break;
-                    case 1: // spike is on the middle
-                        TrajectorySequence spikeMiddleTrajectory = backstageRed.Middle(drive, robot);
+        final PropPosition finalSpikeLoc = tseDetector.getPropPosition();
+
+
+//        switch (startLocation) { // start outer switch statement for location relative to field (backstage red, backstage blue, frontstage red, frontstage blue)
+//            case 0: //
+//                // If start location is 0, execute Backstage Red Trajectory
+//                switch ( finalSpikeLoc) { //  start inner switch statement for spike location
+//                    case Left: // spike is on the left
+//                        TrajectorySequence spikeLeftTrajectory = backstageRed.Left(drive, robot);
+//                        drive.followTrajectorySequence(spikeLeftTrajectory);
+//                        break;
+//                    case Center: // spike is on the middle
+//                        TrajectorySequence spikeMiddleTrajectory = backstageRed.Middle(drive, robot);
+//                        drive.followTrajectorySequence(spikeMiddleTrajectory);
+//                        break;
+//                    case Right: //spike is on the right
+//                        TrajectorySequence spikeRightTrajectory = backstageRed.Right(drive, robot);
+//                        drive.followTrajectorySequence(spikeRightTrajectory);
+//                        break;
+//                }
+//                break; // break out of outer swtich statement for location relative to field
+//            case 1:
+//                // If start location is 1, execute Backstage Blue Trajectory
+//                switch ( finalSpikeLoc) {
+//                    case Left: // spike is on the left
+//                        TrajectorySequence spikeLeftTrajectory = backstageBlue.Left(drive, robot);
+//                        drive.followTrajectorySequence(spikeLeftTrajectory);
+//                        break;
+//                    case Center: // spike is on the middle
+//                        TrajectorySequence spikeMiddleTrajectory = backstageBlue.Middle(drive, robot);
+//                        drive.followTrajectorySequence(spikeMiddleTrajectory);
+//                        break;
+//                    case Right: //spike is on the right
+//                        TrajectorySequence spikeRightTrajectory = backstageBlue.Right(drive, robot);
+//                        drive.followTrajectorySequence(spikeRightTrajectory);
+//                        break;
+//                }
+//                break;
+//            case 2:
+//                // If start location is 2, run frontstage Red Trajectory
+//                switch( finalSpikeLoc) {
+//                    case Left: // spike is on the left
+//                        TrajectorySequence spikeLeftTrajectory = frontstageRed.Left(drive, robot);
+//                        drive.followTrajectorySequence(spikeLeftTrajectory);
+//                        break;
+//                    case Right: // spike is on the middle
+//                        TrajectorySequence spikeMiddleTrajectory = frontstageRed.Middle(drive, robot);
+//                        drive.followTrajectorySequence(spikeMiddleTrajectory);
+//                        break;
+//                    case Center: //spike is on the right
+//                        TrajectorySequence spikeRightTrajectory = frontstageRed.Right(drive, robot);
+//                        drive.followTrajectorySequence(spikeRightTrajectory);
+//                        break;
+//                }
+//                break;
+//            case 3:
+//                // If start location is 3, run Frontstage Blue Trajectory
+//                switch( finalSpikeLoc) {
+//                    case Left: // spike is on the left
+//                        TrajectorySequence spikeLeftTrajectory = frontstageBlue.Left(drive, robot);
+//                        drive.followTrajectorySequence(spikeLeftTrajectory);
+//                        break;
+//                    case Center: // spike is on the middle
+//                        TrajectorySequence spikeMiddleTrajectory = frontstageBlue.Middle(drive, robot);
+//                        drive.followTrajectorySequence(spikeMiddleTrajectory);
+//                        break;
+//                    case Right: //spike is on the right
+//                        TrajectorySequence spikeRightTrajectory = frontstageBlue.Right(drive, robot);
+//                        drive.followTrajectorySequence(spikeRightTrajectory);
+//                        break;
+//                }
+//                break;
+//        } //end outer switch statement for location relative to field (backstage red, backstage blue, frontstage red, frontstage blue)
+
+        TrajectorySequence spikeMiddleTrajectory = backstageBlue.Middle(drive, robot);
                         drive.followTrajectorySequence(spikeMiddleTrajectory);
-                        break;
-                    case 2: //spike is on the right
-                        TrajectorySequence spikeRightTrajectory = backstageRed.Right(drive, robot);
-                        drive.followTrajectorySequence(spikeRightTrajectory);
-                        break;
-                }
-                break; // break out of outer swtich statement for location relative to field
-            case 1:
-                // If start location is 1, execute Backstage Blue Trajectory
-                switch (spikeLocation) {
-                    case 0: // spike is on the left
-                        TrajectorySequence spikeLeftTrajectory = backstageBlue.Left(drive, robot);
-                        drive.followTrajectorySequence(spikeLeftTrajectory);
-                        break;
-                    case 1: // spike is on the middle
-                        TrajectorySequence spikeMiddleTrajectory = backstageBlue.Middle(drive, robot);
-                        drive.followTrajectorySequence(spikeMiddleTrajectory);
-                        break;
-                    case 2: //spike is on the right
-                        TrajectorySequence spikeRightTrajectory = backstageBlue.Right(drive, robot);
-                        drive.followTrajectorySequence(spikeRightTrajectory);
-                        break;
-                }
-                break;
-            case 2:
-                // If start location is 2, run frontstage Red Trajectory
-                switch(spikeLocation) {
-                    case 0: // spike is on the left
-                        TrajectorySequence spikeLeftTrajectory = frontstageRed.Left(drive, robot);
-                        drive.followTrajectorySequence(spikeLeftTrajectory);
-                        break;
-                    case 1: // spike is on the middle
-                        TrajectorySequence spikeMiddleTrajectory = frontstageRed.Middle(drive, robot);
-                        drive.followTrajectorySequence(spikeMiddleTrajectory);
-                        break;
-                    case 2: //spike is on the right
-                        TrajectorySequence spikeRightTrajectory = frontstageRed.Right(drive, robot);
-                        drive.followTrajectorySequence(spikeRightTrajectory);
-                        break;
-                }
-                break;
-            case 3:
-                // If start location is 3, run Frontstage Blue Trajectory
-                switch(spikeLocation) {
-                    case 0: // spike is on the left
-                        TrajectorySequence spikeLeftTrajectory = frontstageBlue.Left(drive, robot);
-                        drive.followTrajectorySequence(spikeLeftTrajectory);
-                        break;
-                    case 1: // spike is on the middle
-                        TrajectorySequence spikeMiddleTrajectory = frontstageBlue.Middle(drive, robot);
-                        drive.followTrajectorySequence(spikeMiddleTrajectory);
-                        break;
-                    case 2: //spike is on the right
-                        TrajectorySequence spikeRightTrajectory = frontstageBlue.Right(drive, robot);
-                        drive.followTrajectorySequence(spikeRightTrajectory);
-                        break;
-                }
-                break;
-        } //end outer switch statement for location relative to field (backstage red, backstage blue, frontstage red, frontstage blue)
+
 
 
         telemetry.addData("distance Motor Right", robot.rightDistanceSensor.getDistance(DistanceUnit.INCH));

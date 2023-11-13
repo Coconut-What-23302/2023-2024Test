@@ -18,15 +18,30 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                                 drive.trajectorySequenceBuilder(new Pose2d( -39, -70, Math.toRadians(90)))
 
-                                        .splineToLinearHeading(new Pose2d(-33.75, -44.50, Math.toRadians(-90.00)), Math.toRadians(-90.00))
-                                        .lineToLinearHeading(new Pose2d(-37.00, -13.00, Math.toRadians(-240.00)))
-                                        .lineToLinearHeading(new Pose2d(34.00, -14.00, Math.toRadians(-180.00)))
-                                        .lineToLinearHeading(new Pose2d(35.00, -36.00, Math.toRadians(-180.00)))
-                                        .splineToLinearHeading(new Pose2d(50.00, -20.00, Math.toRadians(-180.00)), Math.toRadians(-180.00))
 
-//                                        .lineToLinearHeading(new Pose2d(47.78, -17.00, Math.toRadians(-180.00)))
-//                                        .lineToLinearHeading(new Pose2d(62.58, -17.01, Math.toRadians(-180.00)))
 
+
+                                        .splineTo(new Vector2d(-36.93, 0.69), Math.toRadians(93.18))
+                                        .waitSeconds(2.2)
+                                        .splineTo(new Vector2d(15.18, 0.10), Math.toRadians(-0.65))
+                                        .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
+//                                            robot.boardPixelServoPos(false);
+                                        })
+                                        .waitSeconds(.6)
+                                        .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
+//                                            robot.boardPixelServoPos(true);
+                                        })
+                                        .waitSeconds(.3)
+                                        .splineTo(new Vector2d(11.85, -37.52), Math.toRadians(264.94))
+                                        .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
+//                                            robot.spikeServoPos(false);
+                                        })
+                                        .waitSeconds(.3)
+                                        .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
+//                                            robot.spikeServoPos(true);
+                                        })
+                                        .waitSeconds(.3)
+                                        .splineTo(new Vector2d(52.60, -31.44), Math.toRadians(90.00))
                                         .build()
 
                 );

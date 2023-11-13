@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.easyopencv.OpenCvWebcam;
+
 /**
  * This is NOT an opmode.
  * This class is used to define all the specific hardware for a single robot.
@@ -33,11 +36,12 @@ public class RobotHardware
     public DistanceSensor leftDistanceSensor = null;
     public DistanceSensor rightDistanceSensor = null;
 
+
     // final variables
 
     public final double intakeDefaultPower = 0;
-    public final double fullOuttake = .8;
-    public final double fullIntake = -.8;
+    public final int fullOuttake = 0;
+    public final int fullIntake = 70;
 
 
 
@@ -88,7 +92,6 @@ public class RobotHardware
         backLeft.setPower(0);
         frontRight.setPower(0);
         backRight.setPower(0);
-        intakeMotor.setPower(0);
         hangLeadScrewMotor.setPower(0);
         hangPivotMotor.setPower(0);
 
@@ -110,14 +113,18 @@ public class RobotHardware
 
 
 
+
+
         // Set almost all motors to run with encoders
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         hangLeadScrewMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         hangPivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
 
 
 
@@ -162,15 +169,6 @@ public void spikeServoPos (boolean direction) {
      * hangPivotPos Sets hang motor position
      * @param direction Sets motor direction up/down | true = up, false = down
      */
-//    public void hangPivotPos (boolean direction) {
-//        if(direction) {
-//           hangPivotMotor.setTargetPosition(pivotUp); // up
-//            hangPivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        } else if(!direction) {
-//            hangPivotMotor.setTargetPosition(pivotDown); // down
-//            hangPivotMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        }
-//    }
 
 
 
