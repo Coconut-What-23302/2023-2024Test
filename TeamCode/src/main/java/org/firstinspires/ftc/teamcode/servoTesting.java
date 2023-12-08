@@ -46,15 +46,15 @@ public class servoTesting extends LinearOpMode {
             robot.frontRight.setPower(frontRightPower);
             robot.backRight.setPower(backRightPower);
 
-            // non drive controls;
-            if(gamepad1.right_bumper) {
-                robot.intakeMotor.setPower(robot.fullOuttake);
-            } else if (gamepad1.left_bumper) {
-                robot.intakeMotor.setPower(robot.fullIntake);
-            }
-//            else {
-//                robot.intakeMotor.setPower(robot.intakeDefaultPower);
+//            // non drive controls;
+//            if(gamepad1.right_bumper) {
+//                robot.intakeMotor.setPower(robot.fullOuttake);
+//            } else if (gamepad1.left_bumper) {
+//                robot.intakeMotor.setPower(robot.fullIntake);
 //            }
+////            else {
+////                robot.intakeMotor.setPower(robot.intakeDefaultPower);
+////            }
 
             if (gamepad1.dpad_up) {
                 robot.hangLeadScrewMotor.setPower(1);
