@@ -26,7 +26,7 @@ public class RobotHardware
     public DcMotor frontRight    = null;
     public DcMotor backRight    = null;
 
-    public DcMotor intakeMotor = null;
+    public DcMotor clawarm = null;
 
     public DcMotor hangLeadScrewMotor = null;
     public DcMotor hangPivotMotor = null;
@@ -65,7 +65,7 @@ public class RobotHardware
         backLeft  = hwMap.dcMotor.get("backLeft");
         frontRight = hwMap.dcMotor.get("frontRight");
         backRight = hwMap.dcMotor.get("backRight");
-        intakeMotor = hwMap.dcMotor.get("spiny");
+        clawarm = hwMap.dcMotor.get("spiny");
         hangLeadScrewMotor = hwMap.dcMotor.get("hangLeadScrew");
         hangPivotMotor = hwMap.dcMotor.get("hangPivot");
 
@@ -77,7 +77,7 @@ public class RobotHardware
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.FORWARD);
-        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+        clawarm.setDirection(DcMotor.Direction.FORWARD);
         hangLeadScrewMotor.setDirection(DcMotor.Direction.FORWARD);
         hangPivotMotor.setDirection(DcMotor.Direction.REVERSE);
 
@@ -105,7 +105,7 @@ public class RobotHardware
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        clawarm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hangLeadScrewMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hangPivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -120,7 +120,7 @@ public class RobotHardware
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        intakeMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        clawarm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         hangLeadScrewMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         hangPivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 

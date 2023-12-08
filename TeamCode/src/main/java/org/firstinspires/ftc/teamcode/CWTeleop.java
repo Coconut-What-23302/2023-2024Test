@@ -24,9 +24,13 @@ public class CWTeleop extends LinearOpMode {
         boolean boardServoCheck = false;
         boolean intakeCheck = false;
         boolean manualOverride = false;
-        robot.intakeMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.clawarm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.clawarm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //    boolean hangPivotCheck = false;
+        boolean clawMoveCheck = false;
+        int armPoisition = 0;
+
+
 
 
         waitForStart();
@@ -59,15 +63,22 @@ public class CWTeleop extends LinearOpMode {
             robot.hangPivotMotor.setPower(hangPivotPower); // set hang pivot motor to negative power of
 
 
-            if (gamepad1.a && robot.intakeMotor.getCurrentPosition() < 20 && manualOverride == false) {
-                robot.intakeMotor.setTargetPosition(80);
-                robot.intakeMotor.setPower(0.5);
-                robot.intakeMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            } else if ((gamepad1.a && robot.intakeMotor.getCurrentPosition() >= 41 && manualOverride) == false) {
-                robot.intakeMotor.setTargetPosition(-10);
-                robot.intakeMotor.setPower(1);
-                robot.intakeMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if (gamepad1.a) {
+                armPoisition = armPoisition + 2;
             }
+            else if (gamepad1.b) {
+                armPoisition = 69696969;
+            }
+            else if (gamepad1.left_bumper){
+                armPoisition = -696969;
+            }
+            else if (gamepad2.right_bumper){
+                armPoisition = armPoisition -2;
+            }
+            robot.clawarm.setPower(0.70);
+            robot.clawarm.setTargetPosition(armPoisition);
+
+
 
             if (gamepad1.dpad_up) {
                 robot.hangLeadScrewMotor.setPower(1);
@@ -76,19 +87,6 @@ public class CWTeleop extends LinearOpMode {
             } else {
                 robot.hangLeadScrewMotor.setPower(0);
             }
-
-            if (gamepad1.dpad_right) {
-                robot.intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                robot.intakeMotor.setPower(0.3);
-                if (manualOverride = false) {
-                    manualOverride = !manualOverride;
-                }
-            } else if (gamepad1.dpad_left) {
-                robot.intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                robot.intakeMotor.setPower(-0.3);
-                if (manualOverride = false) {
-                    manualOverride = !manualOverride;
-                }
 
 
                 //all manual overrides driver for 2
@@ -112,12 +110,12 @@ public class CWTeleop extends LinearOpMode {
 //             manual overrides driver 2
 
 
-                telemetry.addData("intake po", robot.intakeMotor.getCurrentPosition());
+                telemetry.addData("claw arm position", robot.clawarm.getCurrentPosition());
                 telemetry.update();
 
 
             }
         }
     }
-}
+
 
