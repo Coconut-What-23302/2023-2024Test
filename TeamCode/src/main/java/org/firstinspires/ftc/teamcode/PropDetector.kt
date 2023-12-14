@@ -104,7 +104,6 @@ class PropDetector(private val telemetry: Telemetry, private val colorToDetect: 
         }
 
         telemetry.update()
-
         return frame
     }
 }

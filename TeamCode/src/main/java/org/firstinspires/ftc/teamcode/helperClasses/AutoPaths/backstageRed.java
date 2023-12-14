@@ -22,11 +22,11 @@ public class backstageRed {
                 // logic here
                 .splineToLinearHeading(new Pose2d(-38.50, -24.00, Math.toRadians(0.00)), Math.toRadians(0.00))
                 .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
-                    robot.spikeServoPos(false);
+//                    robot.spikeServoPos(false);
                 })
                 .waitSeconds(.3)
                 .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
-                    robot.spikeServoPos(true);
+//                    robot.spikeServoPos(true);
                 })
                 .waitSeconds(.3)
                 .lineToLinearHeading(new Pose2d(-37.00, -13.00, Math.toRadians(-240.00)))
@@ -65,11 +65,11 @@ public class backstageRed {
 
                 .splineToLinearHeading(new Pose2d(-33, -44.50, Math.toRadians(90.00)), Math.toRadians(90.00))
                 .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
-                    robot.spikeServoPos(false);
+//                    robot.spikeServoPos(false);
                 })
                 .waitSeconds(.3)
                 .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
-                    robot.spikeServoPos(true);
+//                    robot.spikeServoPos(true);
                 })
                 .lineToLinearHeading(new Pose2d(-37.00, -13.00, Math.toRadians(-240.00)))
 //                .lineToLinearHeading(new Pose2d(34.00, -14.00, Math.toRadians(-180.00)))
@@ -106,11 +106,11 @@ public class backstageRed {
                 .splineToConstantHeading(new Vector2d(-47.36, -51.56), Math.toRadians(-10.02))
                 .splineToLinearHeading(new Pose2d(-39.00, -41.00, Math.toRadians(-90.00)), Math.toRadians(-90.00))
                 .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
-                    robot.spikeServoPos(false);
+//                    robot.spikeServoPos(false);
                 })
                 .waitSeconds(.3)
                 .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
-                    robot.spikeServoPos(true);
+//                    robot.spikeServoPos(true);
                 })
                 .waitSeconds(.3)
                 .lineToLinearHeading(new Pose2d(-29.48, -39.15, Math.toRadians(-90.00)))

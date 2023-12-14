@@ -65,6 +65,6 @@ public class CWAutoRed extends LinearOpMode {
         }
 
         // Transfer the robot's pose between op modes
-        PoseStorage.transferedPose = drive.getPoseEstimate();
+//        PoseStorage.transferedPose = drive.getPoseEstimate();
     }
 }

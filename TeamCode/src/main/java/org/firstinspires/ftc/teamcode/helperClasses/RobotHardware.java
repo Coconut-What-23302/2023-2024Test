@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.helperClasses;
 
 //import com.qualcomm.robotcore.hardware.AnalogInput;
 
+import static android.os.SystemClock.sleep;
+
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -26,15 +29,16 @@ public class RobotHardware
     public DcMotor frontRight    = null;
     public DcMotor backRight    = null;
 
-    public DcMotor clawarm = null;
-
+    public DcMotor clawArm = null;
     public DcMotor hangLeadScrewMotor = null;
     public DcMotor hangPivotMotor = null;
 
-    public Servo   spikeMarkDrop    = null;
-    public Servo   boardPixelDrop     = null;
-    public DistanceSensor leftDistanceSensor = null;
-    public DistanceSensor rightDistanceSensor = null;
+    public Servo   leftClaw    = null;
+    public Servo     rightClaw   = null;
+    public Servo clawWrist = null;
+
+    public Servo planeLaunch = null;
+
 
 
     // final variables
@@ -42,6 +46,23 @@ public class RobotHardware
     public final double intakeDefaultPower = 0;
     public final int fullOuttake = 0;
     public final int fullIntake = 70;
+
+    public final int clawFullUp = 0;
+
+    public final double rightClawClose = .45;
+
+    public final double leftClawClose = .45;
+
+          public final double rightClawOpen= .34 ;
+
+        public final double leftClawOpen = .65;
+
+
+    public final int clawFullDown = 587;
+
+    public final int clawArmFirstBack = 270;
+
+    public final int clawArmSecondBack = 0;
 
 
 
@@ -65,8 +86,8 @@ public class RobotHardware
         backLeft  = hwMap.dcMotor.get("backLeft");
         frontRight = hwMap.dcMotor.get("frontRight");
         backRight = hwMap.dcMotor.get("backRight");
-        clawarm = hwMap.dcMotor.get("spiny");
-        hangLeadScrewMotor = hwMap.dcMotor.get("hangLeadScrew");
+        clawArm = hwMap.dcMotor.get("clawArm");
+        hangLeadScrewMotor = hwMap.dcMotor.get("hangRaise");
         hangPivotMotor = hwMap.dcMotor.get("hangPivot");
 
 
@@ -77,7 +98,7 @@ public class RobotHardware
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.FORWARD);
-        clawarm.setDirection(DcMotor.Direction.FORWARD);
+        clawArm.setDirection(DcMotor.Direction.FORWARD);
         hangLeadScrewMotor.setDirection(DcMotor.Direction.FORWARD);
         hangPivotMotor.setDirection(DcMotor.Direction.REVERSE);
 
@@ -94,6 +115,9 @@ public class RobotHardware
         backRight.setPower(0);
         hangLeadScrewMotor.setPower(0);
         hangPivotMotor.setPower(0);
+        clawArm.setPower(0);
+
+        clawArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
 
@@ -105,9 +129,10 @@ public class RobotHardware
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        clawarm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        clawArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hangLeadScrewMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hangPivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
 
 
@@ -120,57 +145,99 @@ public class RobotHardware
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        clawarm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        clawArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         hangLeadScrewMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         hangPivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        clawArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        clawArm.setTargetPosition(0);
+        clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
 
 
         // Define and initialize all installed servos
-        boardPixelDrop = hwMap.servo.get("board");
-        spikeMarkDrop = hwMap.servo.get("spike");
+        leftClaw = hwMap.servo.get("rightClaw");
+        rightClaw = hwMap.servo.get("leftClaw");
+        clawWrist = hwMap.servo.get("clawWrist");
+        planeLaunch = hwMap.servo.get("planeLaunch");
+
 
         // set servo default pos;
-        spikeMarkDrop.setPosition(.6);
 
-        boardPixelDrop.setPosition(1);
 
 
         // define and init sensors
-        leftDistanceSensor = hwMap.get(DistanceSensor.class, "leftDistance");
-        rightDistanceSensor = hwMap.get(DistanceSensor.class, "rightDistance");
+
 
     }
-    /**
-     * spikeServoPos Sets Spike Servo position
-     * @param direction Sets servo direction up/down | true = up, false = down
-     */
-public void spikeServoPos (boolean direction) {
-    if(direction) {
-        spikeMarkDrop.setPosition(.6); // up
-    } else if(!direction) {
-        spikeMarkDrop.setPosition(.22); // down
-    }
-}
+
     /**
      * boardPixelServoPos Sets Spike Servo position
-     * @param direction Sets servo direction up/down | true = up, false = down
+     *  Sets servo direction up/down | true = up, false = down
      */
-    public void boardPixelServoPos (boolean direction) {
-        if(direction) {
-            boardPixelDrop.setPosition(1); // up
-        } else if(!direction) {
-            boardPixelDrop.setPosition(0); // down
+    public void clawArmPosition (boolean position) {
+        if(position) {
+            clawArm.setTargetPosition(clawArmFirstBack);
+            clawArm.setPower(.5);
+            clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        } else if(!position) {
+            clawArm.setTargetPosition(clawFullDown);
+            clawArm.setPower(.5);
+            clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
     }
-    /**
-     * hangPivotPos Sets hang motor position
-     * @param direction Sets motor direction up/down | true = up, false = down
-     */
+
+    public void clawPos (double leftPos, double rightPos) {
+        leftClaw.setPosition(leftPos);
+        rightClaw.setPosition(rightPos);
+    }
 
 
+    public void clawPosBoth (boolean position) {
+       if(position) {
+           leftClaw.setPosition(leftClawOpen);
+              rightClaw.setPosition(rightClawOpen);
+       } else if(!position) {
+           leftClaw.setPosition(leftClawClose);
+           rightClaw.setPosition(rightClawClose);
+       }
+    }
+
+    public void dumbWayToDriveToPosition (Pose2d inputPose, Pose2d currentPose) {
+        double powerVal = 0;
+        if (inputPose.getY() > currentPose.getY()) {
+             powerVal = .5;
+        }
+
+        else if (inputPose.getY() < currentPose.getY())
+        {
+            powerVal = -.5;
+        }
+
+        do {
+
+
+            backLeft.setPower(0.5);
+            backRight.setPower(0.5);
+            frontLeft.setPower(0.5);
+            frontRight.setPower(0.5);
+            sleep(250);
+
+
+        }
+        while ((inputPose.getY() * 2) > ((currentPose.getY() * 2)-4 ) || (inputPose.getY() * 2) > ((currentPose.getY() * 2) + 2)) ;
+
+
+
+
+
+
+        backLeft.setPower(0);
+        backRight.setPower(0);
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+    }
 
 
 

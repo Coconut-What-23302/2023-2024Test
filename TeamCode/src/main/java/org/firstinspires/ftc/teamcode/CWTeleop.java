@@ -15,20 +15,24 @@ public class CWTeleop extends LinearOpMode {
 
     @Override
 
+
+
     // toggle vars
 
     public void runOpMode() throws InterruptedException {
         robot.init(hardwareMap);
 
-        boolean spikeServoCheck = false;
+        boolean ArmCheck = false;
         boolean boardServoCheck = false;
         boolean intakeCheck = false;
         boolean manualOverride = false;
-        robot.clawarm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.clawarm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //    boolean hangPivotCheck = false;
         boolean clawMoveCheck = false;
         int armPoisition = 0;
+        boolean ArmCheck2 = true;
+        boolean clawCheck2 = false;
+        boolean clawCheck = false;
+
 
 
 
@@ -37,11 +41,21 @@ public class CWTeleop extends LinearOpMode {
 
         if (isStopRequested()) return;
 
+
         while (opModeIsActive()) {
 
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
             double rx = gamepad1.right_stick_x;
+
+//            robot.clawWrist.setPosition(0);
+
+//            robot.rightClaw.setPosition(.53);
+//
+//            robot.leftClaw.setPosition(.0006);
+
+robot.clawWrist.setPosition(1);
+
 
 
             // Denominator is the largest motor power (absolute value) or 1
@@ -52,65 +66,66 @@ public class CWTeleop extends LinearOpMode {
             double backLeftPower = (y - x + rx) / denominator;
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
-            double hangPivotPower = gamepad2.left_stick_y;
-            robot.frontLeft.setPower(frontLeftPower);
-            robot.backLeft.setPower(backLeftPower);
-            robot.frontRight.setPower(frontRightPower);
-            robot.backRight.setPower(backRightPower);
+            double hangPivotPower = gamepad2.left_stick_y * 0.5;
+            robot.frontLeft.setPower(frontLeftPower * .75);
+            robot.backLeft.setPower(backLeftPower * .75);
+            robot.frontRight.setPower(frontRightPower * .75);
+            robot.backRight.setPower(backRightPower * .75);
 
 
             // non drive controls;
             robot.hangPivotMotor.setPower(hangPivotPower); // set hang pivot motor to negative power of
 
+            if (gamepad1.x && !ArmCheck) {
 
-            if (gamepad1.a) {
-                armPoisition = armPoisition + 2;
+                ArmCheck = true; // goes down
             }
-            else if (gamepad1.b) {
-                armPoisition = 69696969;
+            if (!gamepad1.x && ArmCheck) {
+                ArmCheck = false;
+                ArmCheck2 = !ArmCheck2;
             }
-            else if (gamepad1.left_bumper){
-                armPoisition = -696969;
-            }
-            else if (gamepad2.right_bumper){
-                armPoisition = armPoisition -2;
-            }
-            robot.clawarm.setPower(0.70);
-            robot.clawarm.setTargetPosition(armPoisition);
+
+            robot.clawArmPosition(ArmCheck2);
 
 
 
-            if (gamepad1.dpad_up) {
+            if (gamepad1.y && !clawCheck) {
+
+                clawCheck = true; // goes down
+            }
+            if (!gamepad1.y && clawCheck) {
+                clawCheck = false;
+                clawCheck2 = !clawCheck2;
+            }
+
+            robot.clawPosBoth(clawCheck2);
+
+
+
+            if (gamepad2.b){
+                robot.planeLaunch.setPosition(1);
+            }
+
+
+
+            if (gamepad2.dpad_up || gamepad1.dpad_up) {
                 robot.hangLeadScrewMotor.setPower(1);
-            } else if (gamepad1.dpad_down) {
+            } else if (gamepad2.dpad_down || gamepad1.dpad_down) {
                 robot.hangLeadScrewMotor.setPower(-1);
             } else {
                 robot.hangLeadScrewMotor.setPower(0);
             }
 
 
-                //all manual overrides driver for 2
-                if (gamepad2.x && !spikeServoCheck) {
-                    robot.spikeServoPos(false);
-                    spikeServoCheck = true; // goes down
-                } else if (gamepad2.x && spikeServoCheck) {
-                    robot.spikeServoPos(true);
-                    spikeServoCheck = false;
-                }
 
-                if (gamepad2.y && !boardServoCheck) {
-                    robot.boardPixelServoPos(false);
-                    boardServoCheck = true; // goes down
-                } else if (gamepad2.y && boardServoCheck) {
-                    robot.boardPixelServoPos(true);
-                    boardServoCheck = false;
-                }
+
+
 
 
 //             manual overrides driver 2
 
 
-                telemetry.addData("claw arm position", robot.clawarm.getCurrentPosition());
+                telemetry.addData("claw arm position", robot.clawArm.getCurrentPosition());
                 telemetry.update();
 
 

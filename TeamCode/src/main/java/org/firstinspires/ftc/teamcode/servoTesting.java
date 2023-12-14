@@ -67,18 +67,18 @@ public class servoTesting extends LinearOpMode {
 
             //all manual overrides driver for 2
             if(gamepad2.x && !spikeServoCheck) {
-                robot.spikeServoPos(false);
+//                robot.spikeServoPos(false);
                 spikeServoCheck = true; // goes down
             } else if (gamepad2.x && spikeServoCheck) {
-                robot.spikeServoPos(true);
+//                robot.spikeServoPos(true);
                 spikeServoCheck = false;
             }
 
             if(gamepad2.y && !boardServoCheck) {
-                robot.boardPixelServoPos(false);
+//                robot.boardPixelServoPos(false);
                 boardServoCheck = true; // goes down
             } else if (gamepad2.y && boardServoCheck) {
-                robot.boardPixelServoPos(true);
+//                robot.boardPixelServoPos(true);
                 boardServoCheck = false;
             }
 
@@ -91,7 +91,7 @@ public class servoTesting extends LinearOpMode {
 
 
 
-            telemetry.addData("board Servo", robot.boardPixelDrop.getPosition());
+//            telemetry.addData("board Servo", robot.boardPixelDrop.getPosition());
             telemetry.update();
 
 
