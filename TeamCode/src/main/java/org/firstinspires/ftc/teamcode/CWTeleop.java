@@ -41,6 +41,7 @@ public class CWTeleop extends LinearOpMode {
 
         if (isStopRequested()) return;
 
+        robot.clawArm.setPower(.5);
 
         while (opModeIsActive()) {
 
@@ -54,7 +55,7 @@ public class CWTeleop extends LinearOpMode {
 //
 //            robot.leftClaw.setPosition(.0006);
 
-robot.clawWrist.setPosition(1);
+            robot.clawWrist.setPosition(0.2);
 
 
 
@@ -76,30 +77,43 @@ robot.clawWrist.setPosition(1);
             // non drive controls;
             robot.hangPivotMotor.setPower(hangPivotPower); // set hang pivot motor to negative power of
 
-            if (gamepad1.x && !ArmCheck) {
+            if (gamepad1.a && !ArmCheck) {
 
                 ArmCheck = true; // goes down
             }
-            if (!gamepad1.x && ArmCheck) {
+            if (!gamepad1.a && ArmCheck) {
                 ArmCheck = false;
                 ArmCheck2 = !ArmCheck2;
+                armPoisition = robot.clawArmPosition(ArmCheck2);
             }
 
-            robot.clawArmPosition(ArmCheck2);
+            if (gamepad1.left_bumper){
+                armPoisition += 3;
+            }
 
+            if (gamepad1.right_bumper){
+                armPoisition -= 3;
+            }
+            robot.clawArm.setTargetPosition(armPoisition);
 
+            if (gamepad1.left_stick_button && gamepad1.right_stick_button){
+                robot.clawArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                armPoisition = 0;
+                robot.clawArm.setTargetPosition(0);
+                robot.clawArm.setPower(0.5);
+                robot.clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
 
-            if (gamepad1.y && !clawCheck) {
+            if (gamepad1.x && !clawCheck) {
 
                 clawCheck = true; // goes down
             }
-            if (!gamepad1.y && clawCheck) {
+            if (!gamepad1.x && clawCheck) {
                 clawCheck = false;
                 clawCheck2 = !clawCheck2;
             }
 
             robot.clawPosBoth(clawCheck2);
-
 
 
             if (gamepad2.b){

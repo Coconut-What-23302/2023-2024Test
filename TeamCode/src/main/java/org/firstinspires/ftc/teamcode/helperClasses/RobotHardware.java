@@ -49,13 +49,13 @@ public class RobotHardware
 
     public final int clawFullUp = 0;
 
-    public final double rightClawClose = .45;
+    public final double rightClawClose = 0.4;
 
-    public final double leftClawClose = .45;
+    public final double leftClawClose = 1;
 
-          public final double rightClawOpen= .34 ;
+    public final double rightClawOpen= 0.6;
 
-        public final double leftClawOpen = .65;
+    public final double leftClawOpen = 0.8;
 
 
     public final int clawFullDown = 587;
@@ -176,15 +176,11 @@ public class RobotHardware
      * boardPixelServoPos Sets Spike Servo position
      *  Sets servo direction up/down | true = up, false = down
      */
-    public void clawArmPosition (boolean position) {
+    public int clawArmPosition (boolean position) {
         if(position) {
-            clawArm.setTargetPosition(clawArmFirstBack);
-            clawArm.setPower(.5);
-            clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        } else if(!position) {
-            clawArm.setTargetPosition(clawFullDown);
-            clawArm.setPower(.5);
-            clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            return (clawArmFirstBack);
+        } else {
+            return (clawFullDown);
         }
     }
 
@@ -197,7 +193,7 @@ public class RobotHardware
     public void clawPosBoth (boolean position) {
        if(position) {
            leftClaw.setPosition(leftClawOpen);
-              rightClaw.setPosition(rightClawOpen);
+           rightClaw.setPosition(rightClawOpen);
        } else if(!position) {
            leftClaw.setPosition(leftClawClose);
            rightClaw.setPosition(rightClawClose);
