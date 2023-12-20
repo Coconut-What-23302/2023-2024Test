@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.helperClasses;
 
 //import com.qualcomm.robotcore.hardware.AnalogInput;
 
-import static android.os.SystemClock.sleep;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvWebcam;
@@ -36,33 +36,26 @@ public class RobotHardware
     public Servo   leftClaw    = null;
     public Servo     rightClaw   = null;
     public Servo clawWrist = null;
+    public TouchSensor touchSensor = null;
 
-    public Servo planeLaunch = null;
+
 
 
 
     // final variables
 
-    public final double intakeDefaultPower = 0;
-    public final int fullOuttake = 0;
-    public final int fullIntake = 70;
-
-    public final int clawFullUp = 0;
-
-    public final double rightClawClose = 0.4;
-
-    public final double leftClawClose = 1;
-
-    public final double rightClawOpen= 0.6;
-
-    public final double leftClawOpen = 0.8;
+    public class ClawPos {
+        public static final double RIGHT_OPEN = 0.8;
+         public static final double LEFT_OPEN =  0.5;
+        public static final double RIGHT_CLOSE = 0.35;
+         public static final double LEFT_CLOSE = 1.0;
+    }
 
 
-    public final int clawFullDown = 587;
+    public final int clawFullDown = 641;
 
     public final int clawArmFirstBack = 270;
 
-    public final int clawArmSecondBack = 0;
 
 
 
@@ -90,6 +83,8 @@ public class RobotHardware
         hangLeadScrewMotor = hwMap.dcMotor.get("hangRaise");
         hangPivotMotor = hwMap.dcMotor.get("hangPivot");
 
+        touchSensor = hwMap.get(TouchSensor.class, "touch");
+
 
 
 
@@ -114,7 +109,7 @@ public class RobotHardware
         frontRight.setPower(0);
         backRight.setPower(0);
         hangLeadScrewMotor.setPower(0);
-        hangPivotMotor.setPower(0);
+//        hangPivotMotor.setPower(0);
         clawArm.setPower(0);
 
         clawArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -129,7 +124,7 @@ public class RobotHardware
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        clawArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        clawArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hangLeadScrewMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hangPivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -147,20 +142,19 @@ public class RobotHardware
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         clawArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         hangLeadScrewMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        hangPivotMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        hangPivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         clawArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        clawArm.setTargetPosition(0);
-        clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        clawArm.setTargetPosition(0);
+//        clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
 
 
         // Define and initialize all installed servos
-        leftClaw = hwMap.servo.get("rightClaw");
-        rightClaw = hwMap.servo.get("leftClaw");
+        leftClaw = hwMap.servo.get("leftClaw");
+        rightClaw = hwMap.servo.get("rightClaw");
         clawWrist = hwMap.servo.get("clawWrist");
-        planeLaunch = hwMap.servo.get("planeLaunch");
 
 
         // set servo default pos;
@@ -184,56 +178,82 @@ public class RobotHardware
         }
     }
 
-    public void clawPos (double leftPos, double rightPos) {
-        leftClaw.setPosition(leftPos);
-        rightClaw.setPosition(rightPos);
+
+    /** Class to set the  individual position of the claw
+     * @param side true = left, false = right
+     * @param pos true = open, false = close
+     */
+    public void clawPosSingle (boolean side, boolean pos) {
+    if(side == true) {
+        if(pos == true) {
+            leftClaw.setPosition(ClawPos.LEFT_OPEN);
+        } else if(pos == false) {
+            leftClaw.setPosition(ClawPos.LEFT_CLOSE);
+        }
+    } else if(side == false) {
+        if(pos == true) {
+            rightClaw.setPosition(ClawPos.RIGHT_OPEN);
+        } else if(pos == false) {
+            rightClaw.setPosition(ClawPos.RIGHT_CLOSE);
+    }
     }
 
 
+    }
+
+    /**
+     * Class to set the position of both claws
+     * @param position true = open, false = close
+     */
     public void clawPosBoth (boolean position) {
        if(position) {
-           leftClaw.setPosition(leftClawOpen);
-           rightClaw.setPosition(rightClawOpen);
+           leftClaw.setPosition(ClawPos.LEFT_OPEN);
+           rightClaw.setPosition(ClawPos.RIGHT_OPEN);
        } else if(!position) {
-           leftClaw.setPosition(leftClawClose);
-           rightClaw.setPosition(rightClawClose);
+           leftClaw.setPosition(ClawPos.LEFT_CLOSE);
+           rightClaw.setPosition(ClawPos.RIGHT_CLOSE);
        }
     }
 
-    public void dumbWayToDriveToPosition (Pose2d inputPose, Pose2d currentPose) {
-        double powerVal = 0;
-        if (inputPose.getY() > currentPose.getY()) {
-             powerVal = .5;
-        }
-
-        else if (inputPose.getY() < currentPose.getY())
-        {
-            powerVal = -.5;
-        }
-
-        do {
-
-
-            backLeft.setPower(0.5);
-            backRight.setPower(0.5);
-            frontLeft.setPower(0.5);
-            frontRight.setPower(0.5);
-            sleep(250);
-
-
-        }
-        while ((inputPose.getY() * 2) > ((currentPose.getY() * 2)-4 ) || (inputPose.getY() * 2) > ((currentPose.getY() * 2) + 2)) ;
-
-
-
-
-
-
-        backLeft.setPower(0);
-        backRight.setPower(0);
-        frontLeft.setPower(0);
-        frontRight.setPower(0);
+    public enum Marcos {
+        INTAKEPOS,
+        DRIVEUNDERCENTERPOS,
+        FIRSTROWORAUTOPOS,
+        DEFUALTPOS,
+        SECONDLINEPOS,
+        MAXPOS
+        // Add more values as needed
     }
+
+    public void clawMarcos(Marcos macro) {
+    switch(macro) {
+        case INTAKEPOS:
+        case DRIVEUNDERCENTERPOS:
+            clawArm.setTargetPosition(650);
+            clawArm.setPower(0.45);
+            clawWrist.setPosition(0.3972);
+            break;
+        case FIRSTROWORAUTOPOS:
+            clawArm.setTargetPosition(561);
+            clawArm.setPower(0.2);
+            clawWrist.setPosition(0.26);
+            break;
+        case MAXPOS:
+            clawArm.setTargetPosition(384);
+            clawArm.setPower(0.2);
+            clawWrist.setPosition(0.377);
+        case DEFUALTPOS:
+            clawArm.setTargetPosition(1);
+            clawArm.setPower(0.4);
+            clawWrist.setPosition(0.39);
+            break;
+
+
+    }
+    }
+
+
+
 
 
 

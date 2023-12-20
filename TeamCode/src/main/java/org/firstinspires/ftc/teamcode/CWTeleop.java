@@ -26,99 +26,132 @@ public class CWTeleop extends LinearOpMode {
         boolean boardServoCheck = false;
         boolean intakeCheck = false;
         boolean manualOverride = false;
-//    boolean hangPivotCheck = false;
         boolean clawMoveCheck = false;
         int armPoisition = 0;
         boolean ArmCheck2 = true;
         boolean clawCheck2 = false;
         boolean clawCheck = false;
+        boolean leftClawCheck = false;
+        boolean leftClawCheck2 = false;
+        boolean rightClawCheck = false;
+        boolean rightClawCheck2 = false;
+        boolean macroCheck = false;
+        boolean macroCheck2 = false;
+        boolean macro1Check = false;
+        boolean macro1Check2 =false;
 
-
-
-
+        // Initialize claw arm position
 
         waitForStart();
 
         if (isStopRequested()) return;
 
-        robot.clawArm.setPower(.5);
+//        robot.clawArm.setPower(.5);
 
         while (opModeIsActive()) {
 
-            double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
-            double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+
+
+
+
+
+        //driving
+
+
+            // drive inputs
+            double y = -gamepad1.left_stick_y;
+            double x = gamepad1.left_stick_x * 1.1;
             double rx = gamepad1.right_stick_x;
-
-//            robot.clawWrist.setPosition(0);
-
-//            robot.rightClaw.setPosition(.53);
-//
-//            robot.leftClaw.setPosition(.0006);
-
-            robot.clawWrist.setPosition(0.2);
+            // drive input end
 
 
 
-            // Denominator is the largest motor power (absolute value) or 1
-            // This ensures all the powers maintain the same ratio,
-            // but only if at least one is out of the range [-1, 1]
+
+
+           // mechanum drive code
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
             double frontLeftPower = (y + x + rx) / denominator;
             double backLeftPower = (y - x + rx) / denominator;
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
+            // mechanum drive code end
+
+
+
             double hangPivotPower = gamepad2.left_stick_y * 0.5;
+
+            // power constant
             robot.frontLeft.setPower(frontLeftPower * .75);
             robot.backLeft.setPower(backLeftPower * .75);
             robot.frontRight.setPower(frontRightPower * .75);
             robot.backRight.setPower(backRightPower * .75);
 
 
-            // non drive controls;
-            robot.hangPivotMotor.setPower(hangPivotPower); // set hang pivot motor to negative power of
+            robot.hangPivotMotor.setPower(hangPivotPower);
 
-            if (gamepad1.a && !ArmCheck) {
 
-                ArmCheck = true; // goes down
-            }
-            if (!gamepad1.a && ArmCheck) {
-                ArmCheck = false;
-                ArmCheck2 = !ArmCheck2;
-                armPoisition = robot.clawArmPosition(ArmCheck2);
-            }
+            int armPosition = 0;
+            if (gamepad1.left_bumper || gamepad1.right_bumper) {
+                if (gamepad1.left_bumper) {
+                    armPosition += 1;
+                } else if (gamepad1.right_bumper) {
+                    armPosition -= 1;
+                }
 
-            if (gamepad1.left_bumper){
-                armPoisition += 3;
+                robot.clawArm.setTargetPosition(armPosition);
             }
 
-            if (gamepad1.right_bumper){
-                armPoisition -= 3;
-            }
-            robot.clawArm.setTargetPosition(armPoisition);
+//            if (gamepad1.left_stick_button && gamepad1.right_stick_button){
+//                robot.clawArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                armPoisition = 0;
+//                robot.clawArm.setTargetPosition(0);
+//                robot.clawArm.setPower(0.5);
+//                robot.clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            }
 
-            if (gamepad1.left_stick_button && gamepad1.right_stick_button){
-                robot.clawArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                armPoisition = 0;
-                robot.clawArm.setTargetPosition(0);
-                robot.clawArm.setPower(0.5);
-                robot.clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            }
 
+            /** Claw Code
+             * 1. Press X to toggle claw
+             * 2. Press Dpad Left to toggle left claw
+             * 3. Press Dpad Right to toggle right claw
+             */
             if (gamepad1.x && !clawCheck) {
-
-                clawCheck = true; // goes down
+                clawCheck = true;
             }
+
             if (!gamepad1.x && clawCheck) {
                 clawCheck = false;
                 clawCheck2 = !clawCheck2;
+
+                robot.clawPosBoth(clawCheck2);
             }
 
-            robot.clawPosBoth(clawCheck2);
 
-
-            if (gamepad2.b){
-                robot.planeLaunch.setPosition(1);
+            if (gamepad1.dpad_left && !leftClawCheck) {
+                leftClawCheck = true;
             }
+
+            if (!gamepad1.dpad_left && leftClawCheck) {
+                leftClawCheck = false;
+                leftClawCheck2 = !leftClawCheck2;
+
+                robot.clawPosSingle(true, leftClawCheck2);
+            }
+
+            if(gamepad1.dpad_right && !rightClawCheck) {
+                rightClawCheck = true;
+            }
+
+            if(!gamepad1.dpad_right && rightClawCheck) {
+                rightClawCheck = false;
+                rightClawCheck2 = !rightClawCheck2;
+
+                robot.clawPosSingle(false, rightClawCheck2);
+            }
+
+// claw code end here
+
+
 
 
 
@@ -132,15 +165,57 @@ public class CWTeleop extends LinearOpMode {
 
 
 
+            if (gamepad1.y && !macroCheck) {
+                macroCheck = true;
+            }
+
+            if (!gamepad1.y && macroCheck) {
+                macroCheck = false;
+                macroCheck2 = !macroCheck2;
+
+                if(macroCheck2) {
+                    robot.clawMarcos(RobotHardware.Marcos.FIRSTROWORAUTOPOS);
+                    robot.clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                } else {
+                    robot.clawMarcos(RobotHardware.Marcos.INTAKEPOS);
+                    robot.clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
+            }
+
+            if (gamepad1.a && !macro1Check) {
+                macro1Check = true;
+            }
+
+            if (!gamepad1.a && macro1Check) {
+                macro1Check = false;
+                macro1Check2 = !macro1Check2;
+
+                if(macro1Check2) {
+                    robot.clawMarcos(RobotHardware.Marcos.MAXPOS);
+                    robot.clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                } else {
+                    robot.clawMarcos(RobotHardware.Marcos.INTAKEPOS);
+                    robot.clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
+            }
 
 
 
 
-//             manual overrides driver 2
+            // doc manuel control of wrist
+            if(gamepad1.right_trigger > .5) {
+                robot.clawWrist.setPosition(robot.clawWrist.getPosition() + .01);
+            }
+
+            if(gamepad1.left_trigger > .5) {
+                robot.clawWrist.setPosition(robot.clawWrist.getPosition() - .01);
+            }
 
 
-                telemetry.addData("claw arm position", robot.clawArm.getCurrentPosition());
-                telemetry.update();
+            telemetry.addData("Arm Position", robot.clawArm.getCurrentPosition());
+            telemetry.addData("wrist position", robot.clawWrist.getPosition());
+            telemetry.addData("hang pivot position", robot.hangPivotMotor.getCurrentPosition());
+            telemetry.update();
 
 
             }
