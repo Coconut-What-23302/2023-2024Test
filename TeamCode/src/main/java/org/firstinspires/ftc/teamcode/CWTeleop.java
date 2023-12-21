@@ -40,6 +40,7 @@ public class CWTeleop extends LinearOpMode {
         boolean macro1Check = false;
         boolean macro1Check2 =false;
 
+
         // Initialize claw arm position
 
         waitForStart();
@@ -91,7 +92,7 @@ public class CWTeleop extends LinearOpMode {
 
 
             int armPosition = 0;
-            if (gamepad1.left_bumper || gamepad1.right_bumper) {
+            if (gamepad2.left_bumper || gamepad2.right_bumper) {
                 if (gamepad1.left_bumper) {
                     armPosition += 1;
                 } else if (gamepad1.right_bumper) {
@@ -127,11 +128,11 @@ public class CWTeleop extends LinearOpMode {
             }
 
 
-            if (gamepad1.dpad_left && !leftClawCheck) {
+            if (gamepad1.left_bumper && !leftClawCheck) {
                 leftClawCheck = true;
             }
 
-            if (!gamepad1.dpad_left && leftClawCheck) {
+            if (!gamepad1.right_bumper && leftClawCheck) {
                 leftClawCheck = false;
                 leftClawCheck2 = !leftClawCheck2;
 
@@ -164,29 +165,30 @@ public class CWTeleop extends LinearOpMode {
             }
 
 
-
-            if (gamepad1.y && !macroCheck) {
+            if (gamepad1.right_trigger >.5 && !macroCheck) {
                 macroCheck = true;
             }
 
-            if (!gamepad1.y && macroCheck) {
+            if (gamepad1.right_trigger <.5 && macroCheck) {
                 macroCheck = false;
                 macroCheck2 = !macroCheck2;
+            }
 
                 if(macroCheck2) {
                     robot.clawMarcos(RobotHardware.Marcos.FIRSTROWORAUTOPOS);
                     robot.clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.clawWrist.setPosition(.15);
                 } else {
                     robot.clawMarcos(RobotHardware.Marcos.INTAKEPOS);
                     robot.clawArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
             }
 
-            if (gamepad1.a && !macro1Check) {
+            if (gamepad1.left_trigger > .5 && !macro1Check) {
                 macro1Check = true;
             }
 
-            if (!gamepad1.a && macro1Check) {
+            if (gamepad1.left_trigger < .5 && macro1Check) {
                 macro1Check = false;
                 macro1Check2 = !macro1Check2;
 
@@ -203,23 +205,23 @@ public class CWTeleop extends LinearOpMode {
 
 
             // doc manuel control of wrist
-            if(gamepad1.right_trigger > .5) {
+            if(gamepad2.right_trigger > .5) {
                 robot.clawWrist.setPosition(robot.clawWrist.getPosition() + .01);
             }
 
-            if(gamepad1.left_trigger > .5) {
+            if(gamepad2.left_trigger > .5) {
                 robot.clawWrist.setPosition(robot.clawWrist.getPosition() - .01);
             }
 
 
             telemetry.addData("Arm Position", robot.clawArm.getCurrentPosition());
-            telemetry.addData("wrist position", robot.clawWrist.getPosition());
+            telemetry.addData("wrist Position", robot.clawWrist.getPosition());
             telemetry.addData("hang pivot position", robot.hangPivotMotor.getCurrentPosition());
             telemetry.update();
 
 
             }
         }
-    }
+
 
 
